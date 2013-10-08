@@ -1,43 +1,57 @@
 package ee.ut.math.tvt.FutureTech;
 
-import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
-
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class IntroUI extends JFrame {
+public class IntroUI {
 
-	private JPanel contentPane;
+	private final JFrame frame = new JFrame();
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IntroUI frame = new IntroUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private final JPanel contentPane = new JPanel();
 
 	public IntroUI() {
+		this.createFrame();
+	}
 
-		ArrayList<String> data = getData();
+	private void createFrame() {
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 450, 300);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
+		try {
+			Properties prop = new Properties();
+			prop.load(new FileInputStream("application.properties"));
+
+			List<String> data = this.getData(prop);
+			JLabel logo = this.getLogo(prop);
+
+			prop.clear();
+			prop.load(new FileInputStream("version.properties"));
+
+			String version = this.getSoftwareVersion(prop);
+
+			this.createPanel(data, logo, version);
+
+			frame.setContentPane(contentPane);
+			frame.setVisible(true);
+		} catch (Exception e) {
+		}
+	}
+
+	private void createPanel(List<String> data, JLabel logo, String version) {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 
 		JLabel nameLabel = new JLabel(data.get(0));
@@ -56,35 +70,31 @@ public class IntroUI extends JFrame {
 		membersLabel.setText(membersLabel.getText() + " " + data.get(3));
 		contentPane.add(membersLabel);
 
-		JLabel logoLabel = new JLabel(data.get(4));
-		contentPane.add(logoLabel);
+		contentPane.add(logo);
 
 		JLabel versionLabel = new JLabel();
-		versionLabel.setText(versionLabel.getText() + " ");
+		versionLabel.setText(version + " ");
+
 		contentPane.add(versionLabel);
 	}
 
-	private String getSoftwareVersion() {
-		return "";
-	}
+	private List<String> getData(Properties prop) {
+		List<String> data = new ArrayList<String>();
 
-	private ArrayList<String> getData() {
-		ArrayList<String> data = new ArrayList<String>();
-		Properties prop = new Properties();
+		data.add(prop.getProperty("teamName"));
+		data.add(prop.getProperty("teamLeader"));
+		data.add(prop.getProperty("teamLeaderMail"));
+		data.add(prop.getProperty("teamMembers"));
 
-		try {
-			prop.load(new FileInputStream("application.properties"));
-
-			data.add(prop.getProperty("teamName"));
-			data.add(prop.getProperty("teamLeader"));
-			data.add(prop.getProperty("teamLeaderMail"));
-			data.add(prop.getProperty("teamMembers"));
-			data.add(prop.getProperty("logoPath"));
-			;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return data;
 	}
 
+	private JLabel getLogo(Properties prop) throws IOException {
+		BufferedImage myPicture = ImageIO.read(new File(prop.getProperty("teamLogo")));
+		return new JLabel(new ImageIcon(myPicture));
+	}
+
+	private String getSoftwareVersion(Properties prop) {
+		return "";
+	}
 }
