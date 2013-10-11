@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." name="FT Salessystem" default="run">
+<project basedir="." name="FT Salessystem" default="dist">
 
 	<!-- Definitions of variables used during the rest of this script -->
 
@@ -7,8 +7,9 @@
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="src.dir" value="${basedir}/src" />
-	<property name="dist.dir" value="${basedir}/dist" />
-	<property name="conf.dir" value="${basedir}/etc" />
+	<property name="dist.dir" value="${build.classes.dir}/jar" />
+	<property name="conf.dir" value="${basedir}/conf" />
+	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="doc.dir" value="${build.dir}/doc" />
 	<property name="test.reports.dir" value="${build.dir}/reports/" />
 
@@ -31,8 +32,28 @@
 
 	<!-- Definitions of runnable ant targets. Run them from the command line 
 		by executing "ant [targetname]" -->
-
-	<target name="run" depends="build" description="Run the template application">
+	<target name="dist" depends="run" description="Make a project jar file" >
+		<mkdir dir="${dist.dir}"/>
+		     <!-- copy libraries to dist -->
+		     <copy todir="${dist.dir}">
+		        <fileset dir="." includes="lib/*.jar conf/*.properties etc/"/>
+		        
+		     </copy>
+		<jar destfile="${dist.dir}/FutureTech.jar"
+		     basedir="${build.classes.dir}"
+			> 
+			<!-- includes="${conf.dir}/**,${basedir}/etc/**,${lib.dir}/** "-->
+			<manifest>
+				<attribute name="Main-Class" value="ee.ut.math.tvt.FutureTech.Intro"/>
+				<attribute name="Class-Path" value=". lib/log4j-1.2.17.jar lib/miglayout-4.0.jar"/>
+			</manifest>
+		</jar>
+		</target>
+	
+	<target name="jrun" description="Runs the ja file">
+		</target>
+	
+	<target name="run" depends="clean,build" description="Run the template application">
 		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
 			fork="yes" />
 
