@@ -34,29 +34,23 @@
 		by executing "ant [targetname]" -->
 	<target name="dist" depends="run" description="Make a project jar file" >
 		<mkdir dir="${dist.dir}"/>
-		     <!-- copy libraries to dist -->
-		     <copy todir="${dist.dir}">
-		        <fileset dir="." includes="lib/*.jar conf/*.properties etc/"/>
-		        
-		     </copy>
-		<jar destfile="${dist.dir}/FutureTech.jar"
-		     basedir="${build.classes.dir}"
-			> 
+		<!-- copy libraries to dist -->
+		<copy todir="${dist.dir}">
+			<fileset dir="." includes="lib/*.jar conf/*.properties etc/" />
+		</copy>
+		<jar destfile="${dist.dir}/FutureTech.jar" basedir="${build.classes.dir}"> 
 			<!-- includes="${conf.dir}/**,${basedir}/etc/**,${lib.dir}/** "-->
 			<manifest>
 				<attribute name="Main-Class" value="ee.ut.math.tvt.FutureTech.Intro"/>
 				<attribute name="Class-Path" value=". lib/log4j-1.2.17.jar lib/miglayout-4.0.jar"/>
 			</manifest>
 		</jar>
-		</target>
+	</target>
 	
-	<target name="jrun" description="Runs the ja file">
-		</target>
+	<target name="jrun" description="Runs the ja file"></target>
 	
 	<target name="run" depends="clean,build" description="Run the template application">
-		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
-			fork="yes" />
-
+		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath" fork="yes" />
 	</target>
 
 	<target name="build" description="Build the system">
@@ -67,7 +61,6 @@
 			target="1.7" source="1.7" includeantruntime="false">
 			<classpath refid="compile.classpath" />
 		</javac>
-
 	</target>
 
 	<!-- Build internal documentation -->
@@ -84,4 +77,3 @@
 	</target>
 
 </project>
-
