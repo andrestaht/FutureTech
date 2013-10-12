@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.FutureTech;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,14 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import net.miginfocom.swing.MigLayout;
 
 public class IntroUI {
@@ -29,7 +28,7 @@ public class IntroUI {
 
 	private void createFrame() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 460, 450);
+		frame.setBounds(100, 100, 510, 500);
 
 		try {
 			Properties prop = new Properties();
@@ -56,27 +55,27 @@ public class IntroUI {
 		contentPane.setLayout(new MigLayout());
 
 		JLabel nameLabel = new JLabel(data.get(0));
+		nameLabel.setFont(new Font("", Font.PLAIN, 20));
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(nameLabel, "cell 0 0, center");
+		contentPane.add(nameLabel, "cell 0 0, center, height 50");
 
-		JLabel leaderLabel = new JLabel("Team leader:");
-		leaderLabel.setText(leaderLabel.getText() + " " + data.get(1));
+		JLabel leaderLabel = new JLabel("Team leader: ");
+		leaderLabel.setText(leaderLabel.getText() + data.get(1));
 		contentPane.add(leaderLabel, "cell 0 1");
 
-		JLabel mailLabel = new JLabel("Team leader e-mail:");
-		mailLabel.setText(mailLabel.getText() + " " + data.get(2));
+		JLabel mailLabel = new JLabel("Team leader e-mail: ");
+		mailLabel.setText(mailLabel.getText() + data.get(2));
 		contentPane.add(mailLabel, "cell 0 2");
 
-		JLabel membersLabel = new JLabel("Team members:");
-		membersLabel.setText(membersLabel.getText() + " " + data.get(3));
+		JLabel membersLabel = new JLabel("Team members: ");
+		membersLabel.setText(membersLabel.getText() + data.get(3));
 		contentPane.add(membersLabel, "cell 0 3");
 
-		contentPane.add(logo, "cell 0 4, center");
+		contentPane.add(logo, "cell 0 4, center, pad 10 0 0 0, width 10, height 10");
 
-		JLabel versionLabel = new JLabel();
-		versionLabel.setText(version + " ");
-
-		contentPane.add(versionLabel);
+		JLabel versionLabel = new JLabel("Version: ");
+		versionLabel.setText(versionLabel.getText() + version);
+		contentPane.add(versionLabel, "cell 0 5, left, height 20");
 	}
 
 	private List<String> getData(Properties prop) {
@@ -91,12 +90,11 @@ public class IntroUI {
 	}
 
 	private JLabel getLogo(Properties prop) throws IOException {
-		BufferedImage myPicture = ImageIO.read(new File(prop
-				.getProperty("teamLogo")));
+		BufferedImage myPicture = ImageIO.read(new File(prop.getProperty("teamLogo")));
 		return new JLabel(new ImageIcon(myPicture));
 	}
 
 	private String getSoftwareVersion(Properties prop) {
-		return "";
+		return prop.getProperty("build.number");
 	}
 }
