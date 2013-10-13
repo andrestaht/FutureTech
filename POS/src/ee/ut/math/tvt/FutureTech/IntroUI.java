@@ -14,15 +14,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import org.apache.log4j.Logger;
 import net.miginfocom.swing.MigLayout;
 
 public class IntroUI {
+
+	private final Logger log = Logger.getLogger(IntroUI.class);
 
 	private final JFrame frame = new JFrame();
 
 	private final JPanel contentPane = new JPanel();
 
 	public IntroUI() {
+		log.info("Creating frame");
 		this.createFrame();
 	}
 
@@ -32,22 +36,29 @@ public class IntroUI {
 
 		try {
 			Properties prop = new Properties();
+			log.info("Trying to read the application.properties file");
 			prop.load(new FileInputStream("conf//application.properties"));
 
+			log.info("Getting team data");
 			List<String> data = this.getData(prop);
 			JLabel logo = this.getLogo(prop);
 
 			prop.clear();
+
+			log.info("Trying to read the version.properties file");
 			prop.load(new FileInputStream("conf//version.properties"));
 
+			log.info("Getting version number");
 			String version = this.getSoftwareVersion(prop);
 
+			log.info("Creating panel for frame");
 			this.createPanel(data, logo, version);
 
 			frame.setContentPane(contentPane);
 			frame.setVisible(true);
+			log.info("Frame is now visible");
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Creating frame failed - " + e.getMessage());
 		}
 	}
 
