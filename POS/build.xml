@@ -33,7 +33,7 @@
 
 	<!-- Definitions of runnable ant targets. Run them from the command line 
 		by executing "ant [targetname]" -->
-	<target name="dist" depends="run" description="Make a project jar file" >
+	<target name="dist" depends="build" description="Make a project jar file" >
 		<antcall target="revision"></antcall>
 		<mkdir dir="${dist.dir}"/>
 		
