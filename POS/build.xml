@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." name="FT Salessystem" default="dist">
+<project basedir="." name="FT Salessystem" default="build">
 
 	<!-- Definitions of variables used during the rest of this script -->
 
@@ -48,7 +48,6 @@
 				<attribute name="Class-Path" value=". lib/log4j-1.2.17.jar lib/miglayout-4.0.jar ./conf/"/>
 			</manifest>
 		</jar>
-
 	</target>
 	
 	<target name="revision" description="Increases revision number by one">
@@ -67,11 +66,11 @@
 		<java jar="${dist.dir}/FutureTech.jar" fork="true"/> 
 	</target>
 	
-	<target name="run" depends="clean,build" description="Run the template application">
+	<target name="run" depends="build" description="Run the template application">
 		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath" fork="yes" />
 	</target>
 
-	<target name="build" description="Build the system">
+	<target name="build" depends="clean" description="Build the system">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true"
