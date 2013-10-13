@@ -92,16 +92,16 @@ public class IntroUI {
 	private List<String> getData(Properties prop) {
 		List<String> data = new ArrayList<String>();
 
-		data.add(prop.getProperty("teamName"));
-		data.add(prop.getProperty("teamLeader"));
-		data.add(prop.getProperty("teamLeaderMail"));
-		data.add(prop.getProperty("teamMembers"));
+		data.add(prop.getProperty("team.name"));
+		data.add(prop.getProperty("team.leader"));
+		data.add(prop.getProperty("team.leader.email"));
+		data.add(prop.getProperty("team.members"));
 
 		return data;
 	}
 
 	private JLabel getLogo(Properties prop) throws IOException {
-		BufferedImage myPicture = ImageIO.read(new File(prop.getProperty("teamLogo")));
+		BufferedImage myPicture = ImageIO.read(new File(prop.getProperty("team.logo")));
 		return new JLabel(new ImageIcon(myPicture));
 	}
 
