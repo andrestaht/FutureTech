@@ -17,11 +17,9 @@ import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import net.miginfocom.swing.MigLayout;
 
-public class IntroUI {
+public class IntroUI extends JFrame {
 
 	private final Logger log = Logger.getLogger(IntroUI.class);
-
-	private final JFrame frame = new JFrame();
 
 	private final JPanel contentPane = new JPanel();
 
@@ -31,8 +29,8 @@ public class IntroUI {
 	}
 
 	private void createFrame() {
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 510, 500);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 510, 500);
 
 		try {
 			Properties prop = new Properties();
@@ -54,8 +52,8 @@ public class IntroUI {
 			log.info("Creating panel for frame");
 			this.createPanel(data, logo, version);
 
-			frame.setContentPane(contentPane);
-			frame.setVisible(true);
+			setContentPane(contentPane);
+			setVisible(true);
 			log.info("Frame is now visible");
 		} catch (Exception e) {
 			log.error("Creating frame failed - " + e.getMessage());
