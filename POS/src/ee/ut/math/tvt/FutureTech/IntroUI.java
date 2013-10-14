@@ -31,6 +31,7 @@ public class IntroUI extends JFrame {
 	private void createFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 500);
+		setResizable(false);
 
 		try {
 			Properties prop = new Properties();
