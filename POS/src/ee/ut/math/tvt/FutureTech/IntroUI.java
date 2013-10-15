@@ -54,8 +54,6 @@ public class IntroUI extends JFrame {
 			this.createPanel(data, logo, version);
 
 			setContentPane(contentPane);
-			setVisible(true);
-			log.info("Frame is now visible");
 		} catch (Exception e) {
 			log.error("Creating frame failed - " + e.getMessage());
 		}
