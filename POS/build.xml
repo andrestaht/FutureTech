@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="FT Salessystem" default="build">
 
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute name="dir" default="" />
+		<element name="args" optional="true" />
+		
+		<sequential>
+			<echo message="git @{command}" />
+			<exec executable="git" dir="@{dir}">
+				<arg value="@{command}" />
+				<args/>
+			</exec>
+		</sequential>
+	</macrodef>
+ 
+	<target name="version" description="Commits all changes to version git">
+		<input message="Commit message" addproperty="commit-message" />
+		<echo message="Commiting all changes with message ${commit-message}" />
+		
+		<git command="add">
+			<args>
+				<arg value="." />
+			</args>
+		</git>
+		<git command="commit">
+			<args>
+				<arg value="-am ${commit-message}" />
+			</args>
+		</git>
+		<git command="push" />
+	</target>
+	
 	<!-- Definitions of variables used during the rest of this script -->
 
 	<property file="build.properties" />
