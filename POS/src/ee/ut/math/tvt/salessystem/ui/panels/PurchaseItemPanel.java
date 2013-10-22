@@ -7,17 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
@@ -89,10 +89,10 @@ public class PurchaseItemPanel extends JPanel {
 		nameField = new JTextField();
 		priceField = new JTextField();
 		// Fill the dialog fields after a product has been selected
-		barCodeComboBox.addActionListener(new ActionListener() {		
+		barCodeComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fillDialogFields();			
+				fillDialogFields();
 			}
 		});
 		nameField.setEditable(false);
@@ -165,7 +165,12 @@ public class PurchaseItemPanel extends JPanel {
 			catch (NumberFormatException ex) {
 				quantity = 1;
 			}
-			model.getCurrentPurchaseTableModel().addItem(new SoldItem(stockItem, quantity));
+			SoldItem existingItem = getExistingSoldItem(stockItem);
+			int quantityToCheck = existingItem != null ? existingItem.getQuantity() + quantity : quantity;
+
+			if (checkWareHouseInventory(stockItem, quantityToCheck)) {
+				model.getCurrentPurchaseTableModel().addItem(new SoldItem(stockItem, quantity), existingItem);
+			}
 		}
 	}
 
@@ -227,5 +232,28 @@ public class PurchaseItemPanel extends JPanel {
 		gc.weightx = 1.0;
 		gc.weighty = 1.0;
 		return gc;
+	}
+
+	private SoldItem getExistingSoldItem(StockItem stockItem) {
+		try {
+			return model.getCurrentPurchaseTableModel().getItemById(stockItem.getId());
+		}
+		catch (NoSuchElementException e) {
+			return null;
+		}
+	}
+
+	private boolean checkWareHouseInventory(StockItem stockItem, int quantity) {
+		StockItem item = model.getWarehouseTableModel().getItemById(stockItem.getId());
+
+		if (item.getQuantity() < quantity) {
+			JOptionPane.showMessageDialog(
+				new JFrame(),
+				"Item \"" + item.getName() + "\" amount exceeds item quantity in the Warehouse",
+				"Warning",
+				JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 }

@@ -14,7 +14,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
 
 	public StockTableModel() {
-		super(new String[] { "Id", "Name", "Price", "Quantity" });
+		super(new String[] {"Id", "Name", "Price", "Quantity"});
 	}
 
 	@Override
