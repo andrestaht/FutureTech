@@ -15,7 +15,7 @@
 		</sequential>
 	</macrodef>
  
-	<target name="version" description="Commits all changes to version git">
+	<target name="git_commit" description="Commits all changes to version git">
 		<input message="Commit message" addproperty="commit-message" />
 		<echo message="Commiting all changes with message ${commit-message}" />
 		
@@ -30,6 +30,26 @@
 			</args>
 		</git>
 		<git command="push" />
+	</target>
+
+	<target name="git_tag" description="Makes new tag">
+		<input message="Tag name" addproperty="tag-name" />
+		<input message="Comment" addproperty="tag-comment" />
+		<echo message="Tag called ${tag-name} made" />
+		
+		<git command="tag">
+			<args>
+				<arg value="-a" />
+				<arg value="${tag-name}" />
+				<arg value="-m" />
+				<arg value="${tag-comment}" />
+			</args>
+		</git>
+		<git command="push">
+			<args>
+				<arg value="--tags" />
+			</args>
+		</git>
 	</target>
 	
 	<!-- Definitions of variables used during the rest of this script -->
