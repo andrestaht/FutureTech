@@ -88,7 +88,7 @@ public class PurchaseItemPanel extends JPanel {
 		priceField = new JTextField();
 		// Fill the dialog fields after a product has been selected
 		barCodeComboBox.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fillDialogFields();
@@ -112,7 +112,7 @@ public class PurchaseItemPanel extends JPanel {
 		// Create and add the button
 		addItemButton = new JButton("Add to cart");
 		addItemButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				addItemEventHandler();
@@ -121,13 +121,13 @@ public class PurchaseItemPanel extends JPanel {
 		panel.add(addItemButton);
 		return panel;
 	}
-	
+
 	// Format a StringArray for the combobox
 	private String[] getStockList() {
 		List<String> warehouseItems = new ArrayList<>();
 		for (StockItem each : model.getWarehouseTableModel().getTableRows()) {
 			warehouseItems.add(each.getId() + " - " + each.getName());
-		}		
+		}
 		return warehouseItems.toArray(new String[warehouseItems.size()]);
 	}
 

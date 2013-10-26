@@ -125,6 +125,7 @@ public class PurchaseTab {
 		try {
 			domainController.startNewPurchase();
 			startNewSale();
+			purchasePane.fillDialogFields();
 		}
 		catch (VerificationFailedException e1) {
 			log.error(e1.getMessage());
