@@ -50,6 +50,14 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 		}
 		return buffer.toString();
 	}
+	
+	public String getPurchaseSum() {
+		Double purchaseSum = 0.0;
+		for (final SoldItem item : rows) {
+			purchaseSum += item.getSum();
+		}
+		return purchaseSum.toString();
+	}
 
 	/**
 	 * Add new StockItem to table.
