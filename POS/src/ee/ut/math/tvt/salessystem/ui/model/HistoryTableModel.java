@@ -59,7 +59,7 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 	public void addOrder(final AcceptedOrder order) {
 		orders.add(order);
 		rows.add(order);
-		log.info("Added new sale " + order.getId() + " with total sum of " + order.getTotalSum());
+		log.debug("Added new sale " + order.getId() + " with total sum of " + order.getTotalSum());
 		fireTableDataChanged();
 	}
 	

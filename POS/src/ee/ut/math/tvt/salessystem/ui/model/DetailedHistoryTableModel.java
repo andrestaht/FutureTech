@@ -42,8 +42,7 @@ public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 	public void addItems(List<SoldItem> soldItems) {
 		rows.clear();
 		rows.addAll(soldItems);
-		log.info("Added sold items to the order details table ");
-		fireTableDataChanged();
+		log.debug("Added sold items to the order details table ");
 	}
 
 	@Override

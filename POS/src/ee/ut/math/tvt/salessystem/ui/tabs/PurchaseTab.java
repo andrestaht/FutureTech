@@ -274,7 +274,11 @@ public class PurchaseTab {
 	// Saving the current purchase
 	protected void savePurchase(){
 		AcceptedOrder order = new AcceptedOrder(model.getCurrentPurchaseTableModel().getTableRows(), ((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()), ((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime()), Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum()));
-		model.getHistoryTableModel().addOrder(order);				
+		model.getHistoryTableModel().addOrder(order);
+		//decrease warehouse items quantities
+		for(int i = 0 ; i < order.getSoldItems().size() ; i++ ) {
+			model.getWarehouseTableModel().decreaseItemQuantity(order.getSoldItems().get(i));
+		}
 	}
 	
 	/** Event handler for the <code>return to purchase</code> event. */

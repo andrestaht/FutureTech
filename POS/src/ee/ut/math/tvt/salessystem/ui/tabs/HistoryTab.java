@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
+import ee.ut.math.tvt.salessystem.ui.model.DetailedHistoryTableModel;
 import ee.ut.math.tvt.salessystem.ui.model.PurchaseInfoTableModel;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
 
@@ -72,7 +73,7 @@ public class HistoryTab {
 				detailedInfo.setSize(width, height);
 				Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 				detailedInfo.setLocation((screen.width - width) / 2 + 10, (screen.height - height) / 2 + 50);
-				log.info("Opened info about the sale number " + order.getId());
+				log.debug("Opened info about the sale number " + order.getId());
 				detailedInfo.add(drawDetailedHistoryPane(order.getSoldItems()));
 			}
 		});
@@ -93,8 +94,9 @@ public class HistoryTab {
 	// table of purchase detailed contents
 		private Component drawDetailedHistoryPane(List<SoldItem> items) {
 			final JPanel panel = new JPanel();
-			model.getDetailedHistoryTable().addItems(items);
-			final JTable table = new JTable(model.getDetailedHistoryTable()); 
+			DetailedHistoryTableModel detailedTable = model.getDetailedHistoryTable();
+			detailedTable.addItems(items);
+			final JTable table = new JTable(detailedTable); 
 			JTableHeader header = table.getTableHeader();
 			header.setReorderingAllowed(false);
 			JScrollPane scrollPane = new JScrollPane(table);
@@ -107,5 +109,4 @@ public class HistoryTab {
 			panel.add(scrollPane, gc);
 			return panel;
 		}
-	
 }

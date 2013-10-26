@@ -45,6 +45,4 @@ public class AcceptedOrder implements DisplayableItem{
 	public double getTotalSum() {
 		return totalSum;
 	}
-	
-	
 }
