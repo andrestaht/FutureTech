@@ -1,19 +1,29 @@
 package ee.ut.math.tvt.salessystem.ui.tabs;
 
-import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
-import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
-import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
-import ee.ut.math.tvt.salessystem.ui.panels.PurchaseItemPanel;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
+
 import org.apache.log4j.Logger;
+
+import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
+import ee.ut.math.tvt.salessystem.domain.exception.EnteredSumException;
+import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
+import ee.ut.math.tvt.salessystem.ui.panels.PurchaseItemPanel;
 
 /**
  * Encapsulates everything that has to do with the purchase tab (the tab
@@ -30,6 +40,12 @@ public class PurchaseTab {
 	private JButton submitPurchase;
 
 	private JButton cancelPurchase;
+	
+	private JButton makePurchase;
+	
+	private JButton returnToPurchase;
+	
+	private JFrame confirmationFrame;
 
 	private PurchaseItemPanel purchasePane;
 
@@ -114,6 +130,78 @@ public class PurchaseTab {
 		b.setEnabled(false);
 		return b;
 	}
+	
+	// Creates the "Make purchase" button
+	private JButton createMakePurchaseButton() {
+		JButton b = new JButton("Make purchase");
+		b.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				makePurchaseButtonClicked();		
+			}
+		});
+		return b;
+	}
+	
+	// Creates the "Return to purchase" button
+	private JButton createReturnToPurchaseButton() {
+		JButton b = new JButton("Cancel purchase");
+		b.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				returnToPurchaseButtonClicked();
+			}
+		});
+		return b;
+	}
+	
+	// Purchase confirmation popup screen
+	private void popConfirmationBox() throws EnteredSumException{
+		showConfirmationBox();
+		
+		confirmationFrame = new JFrame("Confirm");
+		confirmationFrame.setLayout(new MigLayout());
+		confirmationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		confirmationFrame.setSize(new Dimension(240,130));
+		confirmationFrame.setLocationRelativeTo(null);
+		confirmationFrame.setResizable(false);
+		
+		// PopupBox for asking paymentAmount
+		String paymentAmount = (String) JOptionPane.showInputDialog(
+                confirmationFrame,
+                "Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum(),
+                "",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "Payment amount:");
+		Double returnAmount = Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum());
+		
+		if (returnAmount < 0) {
+			continuePurchase();
+			throw new EnteredSumException("Entered money amount is too small");
+		}
+				
+		// Purchase sum textlabel
+		confirmationFrame.add(new JLabel("Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum()));
+		// Payment amount textlabel
+		confirmationFrame.add(new JLabel("Payment amount: " + paymentAmount), "newline");
+		// Change amount textlabel
+		confirmationFrame.add(new JLabel("Amount to return: " + returnAmount), "newline");
+		
+		// Initializing make and cancel purchase buttons
+		makePurchase = createMakePurchaseButton();
+		returnToPurchase = createReturnToPurchaseButton();
+		
+		// Adding the buttons
+		confirmationFrame.add(makePurchase, "newline");
+		confirmationFrame.add(returnToPurchase);
+			
+		confirmationFrame.setVisible(true);		
+	}
+
 
 	/*
 	 * === Event handlers for the menu buttons (get executed when the buttons are
@@ -147,16 +235,39 @@ public class PurchaseTab {
 
 	/** Event handler for the <code>submit purchase</code> event. */
 	protected void submitPurchaseButtonClicked() {
-		log.info("Sale complete");
+		try {
+			popConfirmationBox();
+		} catch (EnteredSumException m1) {
+			log.error(m1.getMessage());
+			
+		} catch (Exception e1) {
+			log.error("Input incorrect");
+			continuePurchase();
+		}
+	}
+	
+	/** Event handler for the <code>make purchase</code> event. */
+	protected void makePurchaseButtonClicked() {
 		try {
 			log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
 			domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
 			endSale();
+			saveSale();
+			log.info("Sale complete");
 			model.getCurrentPurchaseTableModel().clear();
-		}
-		catch (VerificationFailedException e1) {
+		} catch (VerificationFailedException e1) {
 			log.error(e1.getMessage());
 		}
+	}
+	
+	// Saving the current purchase
+	protected void saveSale(){
+		
+	}
+	
+	/** Event handler for the <code>return to purchase</code> event. */
+	protected void returnToPurchaseButtonClicked() {
+		continuePurchase();
 	}
 
 	/*
@@ -171,9 +282,28 @@ public class PurchaseTab {
 		cancelPurchase.setEnabled(true);
 		newPurchase.setEnabled(false);
 	}
+	
+	// switch UI to the state that allows to manage confirmation box
+	private void showConfirmationBox() {
+		purchasePane.setEnabled(false);
+		submitPurchase.setEnabled(false);
+		cancelPurchase.setEnabled(false);
+		newPurchase.setEnabled(false);	
+	}
+	
+	// switch UI to the state that allows to continue the purchase
+	private void continuePurchase() {
+		confirmationFrame.dispose();
+		purchasePane.setEnabled(true);
+		submitPurchase.setEnabled(true);
+		cancelPurchase.setEnabled(true);
+		newPurchase.setEnabled(false);
+		
+	}
 
 	// switch UI to the state that allows to initiate new purchase
 	private void endSale() {
+		confirmationFrame.dispose();
 		purchasePane.reset();
 		cancelPurchase.setEnabled(false);
 		submitPurchase.setEnabled(false);
