@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
-import ee.ut.math.tvt.salessystem.domain.exception.EnteredSumException;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
 import ee.ut.math.tvt.salessystem.ui.panels.PurchaseItemPanel;
@@ -165,14 +164,14 @@ public class PurchaseTab {
 	}
 	
 	// Purchase confirmation popup screen
-	private void popConfirmationBox() throws EnteredSumException {
+	private void popConfirmationBox() {
 		showConfirmationBox();
 		
-		confirmationPanel = new JPanel(new MigLayout("nogrid"));
+		confirmationPanel = new JPanel(new MigLayout("nogrid", "", "[][][][fill, grow]"));
 		confirmationPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 		
 		confirmationFrame = new JFrame("Confirm");
-		confirmationFrame.setSize(new Dimension(225,105));
+		confirmationFrame.setSize(new Dimension(300,160));
 		confirmationFrame.setLocationRelativeTo(null);
 		confirmationFrame.setResizable(false);
 		confirmationFrame.setUndecorated(true);
@@ -189,10 +188,12 @@ public class PurchaseTab {
                 "Payment amount:");
 		
 		Double returnAmount = Double.valueOf(((DecimalFormat) new DecimalFormat("0.00")).format(Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())).replace(',', '.'));
+		System.out.println(returnAmount);
 		
 		if (returnAmount < 0) {
+			JOptionPane.showMessageDialog(null, "The entered amount is too small", "Warning", JOptionPane.WARNING_MESSAGE);
 			continuePurchase();
-			throw new EnteredSumException("Entered money amount is too small");
+			return;
 		}
 				
 		// Purchase sum textlabel
@@ -207,8 +208,8 @@ public class PurchaseTab {
 		returnToPurchase = createReturnToPurchaseButton();
 		
 		// Adding the buttons
-		confirmationPanel.add(makePurchase, "newline");
-		confirmationPanel.add(returnToPurchase);
+		confirmationPanel.add(makePurchase, "newline, w 50%");
+		confirmationPanel.add(returnToPurchase, "w 50%");
 			
 		confirmationFrame.setVisible(true);		
 	}
@@ -248,11 +249,8 @@ public class PurchaseTab {
 	protected void submitPurchaseButtonClicked() {
 		try {
 			popConfirmationBox();
-		} catch (EnteredSumException m1) {
-			log.error(m1.getMessage());
-			
 		} catch (Exception e1) {
-			log.error("Input incorrect");
+		    JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
 			continuePurchase();
 		}
 	}
