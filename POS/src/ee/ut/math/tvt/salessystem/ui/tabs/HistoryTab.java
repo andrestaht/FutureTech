@@ -45,21 +45,21 @@ public class HistoryTab {
 	}
 	
 	// table of the history
-		private Component drawHistoryMainPane() {
-			JPanel panel = new JPanel();
-			JTable table = new JTable(model.getHistoryTableModel()); 
-			JTableHeader header = table.getTableHeader();
-			header.setReorderingAllowed(false);
-			JScrollPane scrollPane = new JScrollPane(table);
-			GridBagConstraints gc = new GridBagConstraints();
-			GridBagLayout gb = new GridBagLayout();
-			gc.fill = GridBagConstraints.BOTH;
-			gc.weightx = 1.0;
-			gc.weighty = 1.0;
-			panel.setLayout(gb);
-			panel.add(scrollPane, gc);
-			panel.setBorder(BorderFactory.createTitledBorder("Purchase History"));
-			return panel;
-		}
+	private Component drawHistoryMainPane() {
+		JPanel panel = new JPanel();
+		JTable table = new JTable(model.getHistoryTableModel()); 
+		JTableHeader header = table.getTableHeader();
+		header.setReorderingAllowed(false);
+		JScrollPane scrollPane = new JScrollPane(table);
+		GridBagConstraints gc = new GridBagConstraints();
+		GridBagLayout gb = new GridBagLayout();
+		gc.fill = GridBagConstraints.BOTH;
+		gc.weightx = 1.0;
+		gc.weighty = 1.0;
+		panel.setLayout(gb);
+		panel.add(scrollPane, gc);
+		panel.setBorder(BorderFactory.createTitledBorder("Purchase History"));
+		return panel;
+	}
 	
 }

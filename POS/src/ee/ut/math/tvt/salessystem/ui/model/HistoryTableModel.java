@@ -7,7 +7,7 @@ public class HistoryTableModel extends SalesSystemTableModel<SoldItem>{
 	private static final long serialVersionUID = 1L;
 	
 	public HistoryTableModel() {
-		super(new String[] { "Date", "Time", "Total Price"});
+		super(new String[] { "Id", "Date", "Time", "Total Price"});
 	}
 
 	@Override
@@ -15,5 +15,7 @@ public class HistoryTableModel extends SalesSystemTableModel<SoldItem>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }
