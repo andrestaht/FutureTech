@@ -49,7 +49,6 @@ public class HistoryTab {
 		gc.anchor = GridBagConstraints.NORTH;
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		gc.weightx = 1.0d;
-		//gc.weighty = 0d;
 		gc.weighty = 1.0d;
 		gc.fill = GridBagConstraints.BOTH;
 		panel.add(drawHistoryMainPane(), gc);
@@ -92,21 +91,21 @@ public class HistoryTab {
 	}
 	
 	// table of purchase detailed contents
-		private Component drawDetailedHistoryPane(List<SoldItem> items) {
-			final JPanel panel = new JPanel();
-			DetailedHistoryTableModel detailedTable = model.getDetailedHistoryTable();
-			detailedTable.addItems(items);
-			final JTable table = new JTable(detailedTable); 
-			JTableHeader header = table.getTableHeader();
-			header.setReorderingAllowed(false);
-			JScrollPane scrollPane = new JScrollPane(table);
-			GridBagConstraints gc = new GridBagConstraints();
-			GridBagLayout gb = new GridBagLayout();
-			gc.fill = GridBagConstraints.BOTH;
-			gc.weightx = 1.0;
-			gc.weighty = 1.0;
-			panel.setLayout(gb);
-			panel.add(scrollPane, gc);
-			return panel;
-		}
+	private Component drawDetailedHistoryPane(List<SoldItem> items) {
+		final JPanel panel = new JPanel();
+		DetailedHistoryTableModel detailedTable = model.getDetailedHistoryTable();
+		detailedTable.addItems(items);
+		final JTable table = new JTable(detailedTable); 
+		JTableHeader header = table.getTableHeader();
+		header.setReorderingAllowed(false);
+		JScrollPane scrollPane = new JScrollPane(table);
+		GridBagConstraints gc = new GridBagConstraints();
+		GridBagLayout gb = new GridBagLayout();
+		gc.fill = GridBagConstraints.BOTH;
+		gc.weightx = 1.0;
+		gc.weighty = 1.0;
+		panel.setLayout(gb);
+		panel.add(scrollPane, gc);
+		return panel;
+	}
 }
