@@ -7,6 +7,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,6 +24,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
+import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
 import ee.ut.math.tvt.salessystem.domain.exception.EnteredSumException;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
@@ -46,6 +51,8 @@ public class PurchaseTab {
 	private JButton returnToPurchase;
 	
 	private JFrame confirmationFrame;
+	
+	private JPanel confirmationPanel;
 
 	private PurchaseItemPanel purchasePane;
 
@@ -158,15 +165,18 @@ public class PurchaseTab {
 	}
 	
 	// Purchase confirmation popup screen
-	private void popConfirmationBox() throws EnteredSumException{
+	private void popConfirmationBox() throws EnteredSumException {
 		showConfirmationBox();
 		
+		confirmationPanel = new JPanel(new MigLayout("nogrid"));
+		confirmationPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		
 		confirmationFrame = new JFrame("Confirm");
-		confirmationFrame.setLayout(new MigLayout());
-		confirmationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		confirmationFrame.setSize(new Dimension(240,130));
+		confirmationFrame.setSize(new Dimension(225,105));
 		confirmationFrame.setLocationRelativeTo(null);
 		confirmationFrame.setResizable(false);
+		confirmationFrame.setUndecorated(true);
+		confirmationFrame.add(confirmationPanel);
 		
 		// PopupBox for asking paymentAmount
 		String paymentAmount = (String) JOptionPane.showInputDialog(
@@ -177,7 +187,8 @@ public class PurchaseTab {
                 null,
                 null,
                 "Payment amount:");
-		Double returnAmount = Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum());
+		
+		Double returnAmount = Double.valueOf(((DecimalFormat) new DecimalFormat("0.00")).format(Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())).replace(',', '.'));
 		
 		if (returnAmount < 0) {
 			continuePurchase();
@@ -185,19 +196,19 @@ public class PurchaseTab {
 		}
 				
 		// Purchase sum textlabel
-		confirmationFrame.add(new JLabel("Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum()));
+		confirmationPanel.add(new JLabel("Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum()));
 		// Payment amount textlabel
-		confirmationFrame.add(new JLabel("Payment amount: " + paymentAmount), "newline");
+		confirmationPanel.add(new JLabel("Payment amount: " + paymentAmount), "newline");
 		// Change amount textlabel
-		confirmationFrame.add(new JLabel("Amount to return: " + returnAmount), "newline");
+		confirmationPanel.add(new JLabel("Amount to return: " + returnAmount), "newline");
 		
 		// Initializing make and cancel purchase buttons
 		makePurchase = createMakePurchaseButton();
 		returnToPurchase = createReturnToPurchaseButton();
 		
 		// Adding the buttons
-		confirmationFrame.add(makePurchase, "newline");
-		confirmationFrame.add(returnToPurchase);
+		confirmationPanel.add(makePurchase, "newline");
+		confirmationPanel.add(returnToPurchase);
 			
 		confirmationFrame.setVisible(true);		
 	}
@@ -252,7 +263,7 @@ public class PurchaseTab {
 			log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
 			domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
 			endSale();
-			saveSale();
+			savePurchase();
 			log.info("Sale complete");
 			model.getCurrentPurchaseTableModel().clear();
 		} catch (VerificationFailedException e1) {
@@ -261,12 +272,14 @@ public class PurchaseTab {
 	}
 	
 	// Saving the current purchase
-	protected void saveSale(){
-		
+	protected void savePurchase(){
+		AcceptedOrder order = new AcceptedOrder(model.getCurrentPurchaseTableModel().getTableRows(), ((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()), ((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime()), Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum()));
+		model.getHistoryTableModel().addItem(order);				
 	}
 	
 	/** Event handler for the <code>return to purchase</code> event. */
 	protected void returnToPurchaseButtonClicked() {
+		log.info("Returning to basket");
 		continuePurchase();
 	}
 
