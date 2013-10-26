@@ -1,7 +1,7 @@
 package ee.ut.math.tvt.salessystem.domain.data;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+
 
 public class AcceptedOrder implements DisplayableItem{
 
@@ -11,17 +11,17 @@ public class AcceptedOrder implements DisplayableItem{
 
 	private ArrayList<SoldItem> soldItems;
 
-	private Calendar date;
+	private String date;
 	
-	private Calendar time;
+	private String time;
 
 	private double totalSum;
 	
-	public AcceptedOrder(ArrayList<SoldItem> soldItems, Calendar date, Calendar time, double sum) {
+	public AcceptedOrder(ArrayList<SoldItem> soldItems, String date, String time, double totalSum) {
 		this.soldItems = soldItems;
 		this.date = date;
 		this.time = time;
-		this.totalSum = sum;
+		this.totalSum = totalSum;
 		this.id = ID;
 		ID += 1;
 	}
@@ -35,11 +35,11 @@ public class AcceptedOrder implements DisplayableItem{
 		return soldItems;
 	}
 
-	public Calendar getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public Calendar getTime() {
+	public String getTime() {
 		return time;
 	}
 
