@@ -1,17 +1,18 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
-import ee.ut.math.tvt.salessystem.domain.data.StockItem;
+
 
 public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 
 	private static final long serialVersionUID = 1L;
+	
 	private static final Logger log = Logger.getLogger(HistoryTableModel.class);
+	
 	private ArrayList<AcceptedOrder> orders = new ArrayList<>();
 	
 	public HistoryTableModel() {
@@ -50,11 +51,19 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 		return buffer.toString();
 	}
 	
-	public void addItem(final AcceptedOrder order) {
+	/**
+	 * Add new accepted order to the history table. 
+	 * 
+	 * @param order
+	 */
+	public void addOrder(final AcceptedOrder order) {
 		orders.add(order);
 		rows.add(order);
-		log.debug("Added new sale " + order.getId() + " with total sum of " + order.getTotalSum());
+		log.info("Added new sale " + order.getId() + " with total sum of " + order.getTotalSum());
 		fireTableDataChanged();
 	}
 	
+	public AcceptedOrder getOrder(int rowNr) {
+		return orders.get(rowNr);
+	}
 }

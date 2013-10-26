@@ -16,11 +16,11 @@ public class AcceptedOrder implements DisplayableItem{
 
 	private double totalSum;
 	
-	public AcceptedOrder(List<SoldItem> soldItems, String date, String time, double sum) {
+	public AcceptedOrder(List<SoldItem> soldItems, String date, String time, double totalSum) {
 		this.soldItems = soldItems;
 		this.date = date;
 		this.time = time;
-		this.totalSum = sum;
+		this.totalSum = totalSum;
 		this.id = ID;
 		ID += 1;
 	}
