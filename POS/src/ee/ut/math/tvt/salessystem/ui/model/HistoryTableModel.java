@@ -1,20 +1,18 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
 import java.util.ArrayList;
-
+import java.util.List;
 import org.apache.log4j.Logger;
-
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
-
 
 public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger log = Logger.getLogger(HistoryTableModel.class);
-	
-	private ArrayList<AcceptedOrder> orders = new ArrayList<>();
-	
+
+	private final List<AcceptedOrder> orders = new ArrayList<>();
+
 	public HistoryTableModel() {
 		super(new String[] { "Id", "Date", "Time", "Total Price"});
 	}
@@ -33,7 +31,7 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 		}
 		throw new IllegalArgumentException("Column index out of range");
 	}
-	
+
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
@@ -50,9 +48,9 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 		}
 		return buffer.toString();
 	}
-	
+
 	/**
-	 * Add new accepted order to the history table. 
+	 * Add new accepted order to the history table.
 	 * 
 	 * @param order
 	 */
@@ -62,7 +60,7 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 		log.debug("Added new sale " + order.getId() + " with total sum of " + order.getTotalSum());
 		fireTableDataChanged();
 	}
-	
+
 	public AcceptedOrder getOrder(int rowNr) {
 		return orders.get(rowNr);
 	}

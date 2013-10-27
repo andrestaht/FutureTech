@@ -44,13 +44,13 @@ public class PurchaseTab {
 	private JButton submitPurchase;
 
 	private JButton cancelPurchase;
-	
+
 	private JButton makePurchase;
-	
+
 	private JButton returnToPurchase;
-	
+
 	private JFrame confirmationFrame;
-	
+
 	private JPanel confirmationPanel;
 
 	private PurchaseItemPanel purchasePane;
@@ -136,25 +136,25 @@ public class PurchaseTab {
 		b.setEnabled(false);
 		return b;
 	}
-	
+
 	// Creates the "Make purchase" button
 	private JButton createMakePurchaseButton() {
 		JButton b = new JButton("Make purchase");
 		b.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				makePurchaseButtonClicked();		
+				makePurchaseButtonClicked();
 			}
 		});
 		return b;
 	}
-	
+
 	// Creates the "Return to purchase" button
 	private JButton createReturnToPurchaseButton() {
 		JButton b = new JButton("Cancel purchase");
 		b.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				returnToPurchaseButtonClicked();
@@ -162,58 +162,55 @@ public class PurchaseTab {
 		});
 		return b;
 	}
-	
+
 	// Purchase confirmation popup screen
 	private void popConfirmationBox() {
 		showConfirmationBox();
-		
-		confirmationPanel = new JPanel(new MigLayout("nogrid", "", "[][][][fill, grow]"));
-		confirmationPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-		
+
+		confirmationPanel = new JPanel(new MigLayout("nogrid"));
+
 		confirmationFrame = new JFrame("Confirm");
-		confirmationFrame.setSize(new Dimension(300,160));
+		confirmationFrame.setSize(new Dimension(320, 140));
 		confirmationFrame.setLocationRelativeTo(null);
 		confirmationFrame.setResizable(false);
-		confirmationFrame.setUndecorated(true);
 		confirmationFrame.add(confirmationPanel);
-		
+		confirmationFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
 		// PopupBox for asking paymentAmount
 		String paymentAmount = (String) JOptionPane.showInputDialog(
-                confirmationFrame,
-                "Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum(),
-                "",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                "Payment amount:");
-		
-		Double returnAmount = Double.valueOf(((DecimalFormat) new DecimalFormat("0.00")).format(Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())).replace(',', '.'));
-		System.out.println(returnAmount);
-		
+			confirmationFrame,
+			"Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum(),
+			"",
+			JOptionPane.PLAIN_MESSAGE,
+			null,
+			null,
+			"Payment amount");
+		Double returnAmount = Double.valueOf(new DecimalFormat("0.00").format(
+			Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())
+			).replace(',', '.'));
+
 		if (returnAmount < 0) {
 			JOptionPane.showMessageDialog(null, "The entered amount is too small", "Warning", JOptionPane.WARNING_MESSAGE);
 			continuePurchase();
 			return;
 		}
-				
 		// Purchase sum textlabel
 		confirmationPanel.add(new JLabel("Sum: " + model.getCurrentPurchaseTableModel().getPurchaseSum()));
 		// Payment amount textlabel
 		confirmationPanel.add(new JLabel("Payment amount: " + paymentAmount), "newline");
 		// Change amount textlabel
 		confirmationPanel.add(new JLabel("Amount to return: " + returnAmount), "newline");
-		
+
 		// Initializing make and cancel purchase buttons
 		makePurchase = createMakePurchaseButton();
 		returnToPurchase = createReturnToPurchaseButton();
-		
-		// Adding the buttons
-		confirmationPanel.add(makePurchase, "newline, w 50%");
-		confirmationPanel.add(returnToPurchase, "w 50%");
-			
-		confirmationFrame.setVisible(true);		
-	}
 
+		// Adding the buttons
+		confirmationPanel.add(makePurchase, "newline");
+		confirmationPanel.add(returnToPurchase);
+
+		confirmationFrame.setVisible(true);
+	}
 
 	/*
 	 * === Event handlers for the menu buttons (get executed when the buttons are
@@ -250,11 +247,11 @@ public class PurchaseTab {
 		try {
 			popConfirmationBox();
 		} catch (Exception e1) {
-		    JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
 			continuePurchase();
 		}
 	}
-	
+
 	/** Event handler for the <code>make purchase</code> event. */
 	protected void makePurchaseButtonClicked() {
 		try {
@@ -268,17 +265,18 @@ public class PurchaseTab {
 			log.error(e1.getMessage());
 		}
 	}
-	
+
 	// Saving the current purchase
 	protected void savePurchase(){
-		AcceptedOrder order = new AcceptedOrder(model.getCurrentPurchaseTableModel().getTableRows(), ((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()), ((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime()), Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum()));
+		AcceptedOrder order = new AcceptedOrder(
+			model.getCurrentPurchaseTableModel().getTableRows(),
+			((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()),
+			((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime())
+			);
 		model.getHistoryTableModel().addOrder(order);
-		//decrease warehouse items quantities
-		for(int i = 0 ; i < order.getSoldItems().size() ; i++ ) {
-			model.getWarehouseTableModel().decreaseItemQuantity(order.getSoldItems().get(i));
-		}
+		model.getWarehouseTableModel().decreaseItemsQuantity(order.getSoldItems());
 	}
-	
+
 	/** Event handler for the <code>return to purchase</code> event. */
 	protected void returnToPurchaseButtonClicked() {
 		log.info("Returning to basket");
@@ -297,15 +295,15 @@ public class PurchaseTab {
 		cancelPurchase.setEnabled(true);
 		newPurchase.setEnabled(false);
 	}
-	
+
 	// switch UI to the state that allows to manage confirmation box
 	private void showConfirmationBox() {
 		purchasePane.setEnabled(false);
 		submitPurchase.setEnabled(false);
 		cancelPurchase.setEnabled(false);
-		newPurchase.setEnabled(false);	
+		newPurchase.setEnabled(false);
 	}
-	
+
 	// switch UI to the state that allows to continue the purchase
 	private void continuePurchase() {
 		confirmationFrame.dispose();
@@ -313,7 +311,7 @@ public class PurchaseTab {
 		submitPurchase.setEnabled(true);
 		cancelPurchase.setEnabled(true);
 		newPurchase.setEnabled(false);
-		
+
 	}
 
 	// switch UI to the state that allows to initiate new purchase

@@ -5,22 +5,19 @@ import java.util.List;
 public class AcceptedOrder implements DisplayableItem{
 
 	private static long ID = 1;
-	
-	private Long id;
 
-	private List<SoldItem> soldItems;
+	private final Long id;
 
-	private String date;
-	
-	private String time;
+	private final List<SoldItem> soldItems;
 
-	private double totalSum;
-	
-	public AcceptedOrder(List<SoldItem> soldItems, String date, String time, double totalSum) {
+	private final String date;
+
+	private final String time;
+
+	public AcceptedOrder(List<SoldItem> soldItems, String date, String time) {
 		this.soldItems = soldItems;
 		this.date = date;
 		this.time = time;
-		this.totalSum = totalSum;
 		this.id = ID;
 		ID += 1;
 	}
@@ -42,7 +39,11 @@ public class AcceptedOrder implements DisplayableItem{
 		return time;
 	}
 
-	public double getTotalSum() {
-		return totalSum;
+	public String getTotalSum() {
+		Double purchaseSum = 0.0;
+		for (final SoldItem item : soldItems) {
+			purchaseSum += item.getSum();
+		}
+		return purchaseSum.toString();
 	}
 }
