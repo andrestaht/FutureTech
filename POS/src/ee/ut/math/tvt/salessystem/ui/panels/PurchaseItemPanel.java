@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -32,7 +33,7 @@ public class PurchaseItemPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JComboBox<Object> barCodeComboBox;
+	private JComboBox<String> barCodeComboBox;
 
 	private JTextField quantityField;
 
@@ -41,6 +42,8 @@ public class PurchaseItemPanel extends JPanel {
 	private JTextField priceField;
 
 	private JButton addItemButton;
+	
+	private DefaultComboBoxModel<String> comboBoxModel;
 
 	// Warehouse model
 	private final SalesSystemModel model;
@@ -80,7 +83,8 @@ public class PurchaseItemPanel extends JPanel {
 		panel.setLayout(new GridLayout(5, 2));
 		panel.setBorder(BorderFactory.createTitledBorder("Product"));
 		// Initialize combobox
-		barCodeComboBox = new JComboBox<Object>(getStockList());
+		comboBoxModel = new DefaultComboBoxModel<String>(getStockList());
+		barCodeComboBox = new JComboBox<String>(comboBoxModel);
 		// Initialize the textfields
 		quantityField = new JTextField("1");
 		nameField = new JTextField();
@@ -120,6 +124,14 @@ public class PurchaseItemPanel extends JPanel {
 		panel.add(addItemButton);
 		return panel;
 	}
+	
+	// Gets the necessary data for the combobox
+	public void updateComboBoxData() {
+		comboBoxModel.removeAllElements();
+		for (StockItem each : model.getWarehouseTableModel().getTableRows()) {
+			comboBoxModel.addElement(each.getId() + " - " + each.getName());
+		}
+	}
 
 	// Format a StringArray for the combobox
 	private String[] getStockList() {
@@ -154,6 +166,9 @@ public class PurchaseItemPanel extends JPanel {
 			return null;
 		}
 		catch (NoSuchElementException ex) {
+			return null;
+		}
+		catch (ArrayIndexOutOfBoundsException ex) {
 			return null;
 		}
 	}

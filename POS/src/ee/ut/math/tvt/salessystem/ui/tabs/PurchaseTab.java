@@ -223,6 +223,7 @@ public class PurchaseTab {
 		try {
 			domainController.startNewPurchase();
 			startNewSale();
+			purchasePane.updateComboBoxData();
 			purchasePane.fillDialogFields();
 		}
 		catch (VerificationFailedException e1) {
@@ -264,6 +265,7 @@ public class PurchaseTab {
 			log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
 			domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
 			endSale();
+			confirmationFrame.dispose();
 			savePurchase();
 			log.info("Sale complete");
 			model.getCurrentPurchaseTableModel().clear();
