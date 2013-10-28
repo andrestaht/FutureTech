@@ -119,6 +119,8 @@
 
 	<target name="git_commit" description="Commits all changes to version git">
 		<input message="Commit message" addproperty="commit-message" />
+		<input message="Github username" addproperty="username" />
+		<input message="Github password" addproperty="password" />
 		<echo message="Commiting all changes with message ${commit-message}" />
 		
 		<git command="add">
@@ -131,7 +133,11 @@
 				<arg value="-m ${commit-message}" />
 			</args>
 		</git>
-		<git command="push" />
+		<git command="push">
+			<args>
+				<arg vlaue="https://${username}:${password}@github.com/andrestaht/FutureTech.git" />
+			</args>
+		</git>
 	</target>
 
 	<target name="git_tag" description="Makes new tag">
