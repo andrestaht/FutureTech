@@ -53,6 +53,21 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		fireTableDataChanged();
 	}
 
+	/**
+	 * Modify existing stock item from table.
+	 * 
+	 * @param stockItem
+	 */
+	public void modifyItem(final StockItem stockItem) {
+		StockItem item = getItemById(stockItem.getId());
+		item.setName(stockItem.getName());
+		item.setDescription(stockItem.getDescription());
+		item.setPrice(stockItem.getPrice());
+		item.setQuantity(stockItem.getQuantity());
+		log.debug("Modified existing item by id " + stockItem.getId());
+		fireTableDataChanged();
+	}
+
 	public void decreaseItemsQuantity(List<SoldItem> soldItems) {
 		for(SoldItem soldItem : soldItems) {
 			StockItem item = getItemById(soldItem.getId());

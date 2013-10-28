@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,14 +27,26 @@ import javax.swing.table.JTableHeader;
 public class StockTab {
 
 	private JButton addItem;
+
+	private JButton modifyItem;
 	
 	private JButton confirmItemAdd;
 
-	private JButton cancelAdd;
+	private JButton cancelItemAdd;
+
+	private JButton confirmItemModify;
+
+	private JButton cancelItemModify;
 
 	private JFrame addItemFrame;
 
+	private JFrame modifyItemFrame;
+
 	private JPanel addItemPanel;
+
+	private JPanel modifyItemPanel;
+
+	private JTextField idField;
 
 	private JTextField nameField;
 
@@ -56,12 +69,12 @@ public class StockTab {
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints gc = new GridBagConstraints();
 		panel.setLayout(gb);
-		gc.fill = GridBagConstraints.HORIZONTAL;
-		gc.anchor = GridBagConstraints.NORTH;
+		gc.anchor = GridBagConstraints.NORTHWEST;
 		gc.gridwidth = GridBagConstraints.REMAINDER;
-		gc.weightx = 1.0d;
-		gc.weighty = 0d;
+		gc.weightx = 0;
+		gc.weighty = 0;
 		panel.add(drawStockMenuPane(), gc);
+		gc.weightx = 1.0d;
 		gc.weighty = 1.0;
 		gc.fill = GridBagConstraints.BOTH;
 		panel.add(drawStockMainPane(), gc);
@@ -71,16 +84,14 @@ public class StockTab {
 	// warehouse menu
 	private Component drawStockMenuPane() {
 		JPanel panel = new JPanel();
-		GridBagConstraints gc = new GridBagConstraints();
+		GridBagConstraints gc = getConstraintsForMenuButtons();
 		GridBagLayout gb = new GridBagLayout();
 		panel.setLayout(gb);
-		gc.anchor = GridBagConstraints.NORTHWEST;
-		gc.weightx = 0;
 		addItem = createAddItemButton();
-		gc.gridwidth = GridBagConstraints.RELATIVE;
-		gc.weightx = 1.0;
+		modifyItem = createModifyItemButton();
 		panel.add(addItem, gc);
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		panel.add(modifyItem, gc);
+		//panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		return panel;
 	}
 
@@ -115,8 +126,21 @@ public class StockTab {
 		return b;
 	}
 
-	// Creates the button "Confirm"
-	private JButton createConfirmButton() {
+	// Creates the button "Modify"
+	private JButton createModifyItemButton() {
+		JButton b = new JButton("Modify");
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modifyItemButtonClicked();
+			}
+		});
+		return b;
+	}
+
+	// Creates the button "Confirm" for item adding
+	private JButton createItemAddConfirmButton() {
 		JButton b = new JButton("Confirm");
 		b.addActionListener(new ActionListener() {
 
@@ -128,8 +152,8 @@ public class StockTab {
 		return b;
 	}
 
-	// Creates the button "Cancel"
-	private JButton createCancelButton() {
+	// Creates the button "Cancel" for item adding
+	private JButton createItemAddCancelButton() {
 		JButton b = new JButton("Cancel");
 		b.addActionListener(new ActionListener() {
 
@@ -140,12 +164,48 @@ public class StockTab {
 		});
 		return b;
 	}
+
+	// Creates the button "Confirm" for item modifying
+	private JButton createItemModifyConfirmButton() {
+		JButton b = new JButton("Confirm");
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				confirmItemModifyButtonClicked();
+			}
+		});
+		return b;
+	}
+
+	// Creates the button "Cancel" for item modifying
+	private JButton createItemModifyCancelButton() {
+		JButton b = new JButton("Cancel");
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modifyItemFrame.dispose();
+			}
+		});
+		return b;
+	}
 	
 	/** Event handler for the <code>add item</code> event. */
 	protected void addItemButtonClicked() {
 		try {
 			popAddItemBox();
-		} catch (Exception e1) {
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
+			addItemFrame.dispose();
+		}
+	}
+
+	/** Event handler for the <code>modify item</code> event. */
+	protected void modifyItemButtonClicked() {
+		try {
+			popModifyItemBox();
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
 			addItemFrame.dispose();
 		}
@@ -164,6 +224,25 @@ public class StockTab {
 			}
 			model.getWarehouseTableModel().addItem(new StockItem(itemName, itemDesc, itemPrice, itemQuantity));
 			addItemFrame.dispose();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	/** Event handler for the <code>confirm item modify</code> event. */
+	protected void confirmItemModifyButtonClicked() {
+		try {
+			Long itemId = Long.parseLong(idField.getText());
+			String itemName = nameField.getText();
+			String itemDesc = nameField.getText();
+			Double itemPrice = Double.parseDouble(priceField.getText());
+			int itemQuantity = Integer.parseInt(quantityField.getText());
+
+			if (itemId < 0 || itemName.isEmpty() || itemDesc.isEmpty() || itemPrice < 0 || itemQuantity <= 0) {
+				throw new Exception();
+			}
+			model.getWarehouseTableModel().modifyItem(new StockItem(itemId, itemName, itemDesc, itemPrice, itemQuantity));
+			modifyItemFrame.dispose();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
 		}
@@ -199,13 +278,66 @@ public class StockTab {
 		addItemPanel.add(quantityField);
 	
 		// Initializing confirm and cancel buttons
-		confirmItemAdd = createConfirmButton();
-		cancelAdd = createCancelButton();
+		confirmItemAdd = createItemAddConfirmButton();
+		cancelItemAdd = createItemAddCancelButton();
 	
 		// Adding the buttons
 		addItemPanel.add(confirmItemAdd);
-		addItemPanel.add(cancelAdd);
+		addItemPanel.add(cancelItemAdd);
 
 		addItemFrame.setVisible(true);
+	}
+
+	// Modify item popup screen
+	private void popModifyItemBox() {
+		modifyItemPanel = new JPanel(new GridLayout(6, 2));
+
+		idField = new JTextField();
+		nameField = new JTextField();
+		descField = new JTextField();
+		priceField = new JTextField();
+		quantityField = new JTextField();
+	
+		modifyItemFrame = new JFrame("Modify item");
+		modifyItemFrame.setSize(new Dimension(320, 160));
+		modifyItemFrame.setLocationRelativeTo(null);
+		modifyItemFrame.setResizable(false);
+		modifyItemFrame.add(modifyItemPanel);
+		modifyItemFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+		// modify item id textlabel and textfield to panel
+		modifyItemPanel.add(new JLabel("Id: "));
+		modifyItemPanel.add(idField);
+		// modify item name textlabel and textfield to panel
+		modifyItemPanel.add(new JLabel("Name: "));
+		modifyItemPanel.add(nameField);
+		// modify item description textlabel and textfield to panel
+		modifyItemPanel.add(new JLabel("Description: "));
+		modifyItemPanel.add(descField);
+		// modify item price textlabel and textfield to panel
+		modifyItemPanel.add(new JLabel("Price: "));
+		modifyItemPanel.add(priceField);
+		// modify item amount textlabel and textfield to panel
+		modifyItemPanel.add(new JLabel("Quantity: "));
+		modifyItemPanel.add(quantityField);
+	
+		// Initializing confirm and cancel buttons
+		confirmItemModify = createItemModifyConfirmButton();
+		cancelItemModify = createItemModifyCancelButton();
+	
+		// Adding the buttons
+		modifyItemPanel.add(confirmItemModify);
+		modifyItemPanel.add(cancelItemModify);
+
+		modifyItemFrame.setVisible(true);
+	}
+
+	// The constraints that control the layout of the buttons in the purchase menu
+	private GridBagConstraints getConstraintsForMenuButtons() {
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.weightx = 0.5;
+		gc.anchor = GridBagConstraints.NORTHWEST;
+		gc.gridwidth = GridBagConstraints.RELATIVE;
+		return gc;
 	}
 }
