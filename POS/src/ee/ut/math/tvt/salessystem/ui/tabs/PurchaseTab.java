@@ -324,7 +324,6 @@ public class PurchaseTab {
 
 	// switch UI to the state that allows to initiate new purchase
 	private void endSale() {
-		confirmationFrame.dispose();
 		purchasePane.reset();
 		cancelPurchase.setEnabled(false);
 		submitPurchase.setEnabled(false);
