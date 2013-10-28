@@ -252,6 +252,8 @@ public class PurchaseTab {
 	protected void submitPurchaseButtonClicked() {
 		try {
 			popConfirmationBox();
+		} catch (NullPointerException n1) {
+			continuePurchase();			
 		} catch (Exception e1) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
 			continuePurchase();
