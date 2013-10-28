@@ -135,7 +135,7 @@
 		</git>
 		<git command="push">
 			<args>
-				<arg vlaue="https://${username}:${password}@github.com/andrestaht/FutureTech.git" />
+				<arg value="https://${username}:${password}@github.com/andrestaht/FutureTech.git" />
 			</args>
 		</git>
 	</target>
