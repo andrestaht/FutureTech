@@ -29,6 +29,8 @@ public class StockTab {
 	
 	private JButton confirmItemAdd;
 
+	private JButton cancelAdd;
+
 	private JFrame addItemFrame;
 
 	private JPanel addItemPanel;
@@ -125,6 +127,19 @@ public class StockTab {
 		});
 		return b;
 	}
+
+	// Creates the button "Cancel"
+	private JButton createCancelButton() {
+		JButton b = new JButton("Cancel");
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addItemFrame.dispose();
+			}
+		});
+		return b;
+	}
 	
 	/** Event handler for the <code>add item</code> event. */
 	protected void addItemButtonClicked() {
@@ -183,11 +198,13 @@ public class StockTab {
 		addItemPanel.add(new JLabel("Quantity: "));
 		addItemPanel.add(quantityField);
 	
-		// Initializing confirm button
+		// Initializing confirm and cancel buttons
 		confirmItemAdd = createConfirmButton();
+		cancelAdd = createCancelButton();
 	
-		// Adding the button
+		// Adding the buttons
 		addItemPanel.add(confirmItemAdd);
+		addItemPanel.add(cancelAdd);
 
 		addItemFrame.setVisible(true);
 	}
