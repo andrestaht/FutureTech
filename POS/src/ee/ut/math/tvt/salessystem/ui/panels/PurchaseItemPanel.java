@@ -174,7 +174,7 @@ public class PurchaseItemPanel extends JPanel {
 			}
 			SoldItem existingItem = getExistingSoldItem(stockItem);
 
-			if (existingItem != null && existingItem.getQuantity() + quantity <= 0 || quantity <= 0) {
+			if (existingItem != null && existingItem.getQuantity() + quantity < 0 || quantity < 0) {
 				JOptionPane.showMessageDialog(
 					new JFrame(),
 					"Item \"" + stockItem.getName() + "\" amount can't go to negative",

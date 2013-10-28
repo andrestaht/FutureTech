@@ -72,4 +72,13 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 		}
 		fireTableDataChanged();
 	}
+
+	public boolean hasItems() {
+		for (SoldItem row : rows) {
+			if (row.getQuantity() > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

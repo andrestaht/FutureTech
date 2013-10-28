@@ -11,18 +11,14 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import net.miginfocom.swing.MigLayout;
-
 import org.apache.log4j.Logger;
-
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
@@ -185,7 +181,6 @@ public class PurchaseTab {
 			null,
 			null,
 			"Payment amount");
-		
 		Double returnAmount = getReturnAmount(paymentAmount);
 
 		if (returnAmount < 0) {
@@ -210,12 +205,12 @@ public class PurchaseTab {
 
 		confirmationFrame.setVisible(true);
 	}
-	
+
 	// Parses and formats the string into double
 	private double getReturnAmount(String paymentAmount) {
 		return Double.valueOf(new DecimalFormat("0.00").format(
-				Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())
-				).replace(',', '.'));
+			Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())
+			).replace(',', '.'));
 	}
 
 	/*
@@ -251,9 +246,12 @@ public class PurchaseTab {
 	/** Event handler for the <code>submit purchase</code> event. */
 	protected void submitPurchaseButtonClicked() {
 		try {
+			if (!model.getCurrentPurchaseTableModel().hasItems()) {
+				throw new Exception();
+			}
 			popConfirmationBox();
 		} catch (NullPointerException n1) {
-			continuePurchase();			
+			continuePurchase();
 		} catch (Exception e1) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
 			continuePurchase();
