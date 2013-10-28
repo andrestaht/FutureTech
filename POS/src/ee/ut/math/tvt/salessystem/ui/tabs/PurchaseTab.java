@@ -167,7 +167,7 @@ public class PurchaseTab {
 	private void popConfirmationBox() {
 		showConfirmationBox();
 
-		confirmationPanel = new JPanel(new MigLayout("nogrid"));
+		confirmationPanel = new JPanel(new MigLayout("nogrid","","fill, grow"));
 
 		confirmationFrame = new JFrame("Confirm");
 		confirmationFrame.setSize(new Dimension(320, 140));
@@ -185,9 +185,8 @@ public class PurchaseTab {
 			null,
 			null,
 			"Payment amount");
-		Double returnAmount = Double.valueOf(new DecimalFormat("0.00").format(
-			Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())
-			).replace(',', '.'));
+		
+		Double returnAmount = getReturnAmount(paymentAmount);
 
 		if (returnAmount < 0) {
 			JOptionPane.showMessageDialog(null, "The entered amount is too small", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -206,10 +205,17 @@ public class PurchaseTab {
 		returnToPurchase = createReturnToPurchaseButton();
 
 		// Adding the buttons
-		confirmationPanel.add(makePurchase, "newline");
-		confirmationPanel.add(returnToPurchase);
+		confirmationPanel.add(makePurchase, "newline, w 50%");
+		confirmationPanel.add(returnToPurchase, "w 50%");
 
 		confirmationFrame.setVisible(true);
+	}
+	
+	// Parses and formats the string into double
+	private double getReturnAmount(String paymentAmount) {
+		return Double.valueOf(new DecimalFormat("0.00").format(
+				Double.parseDouble(paymentAmount) - Double.parseDouble(model.getCurrentPurchaseTableModel().getPurchaseSum())
+				).replace(',', '.'));
 	}
 
 	/*
