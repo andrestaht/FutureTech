@@ -28,7 +28,7 @@ public class StockTab {
 	private JButton addItem;
 
 	private JButton modifyItem;
-	
+
 	private JButton confirmItemAdd;
 
 	private JButton cancelItemAdd;
@@ -190,7 +190,7 @@ public class StockTab {
 		});
 		return b;
 	}
-	
+
 	/** Event handler for the <code>add item</code> event. */
 	protected void addItemButtonClicked() {
 		try {
@@ -251,19 +251,19 @@ public class StockTab {
 	// Add item popup screen
 	private void popAddItemBox() {
 		addItemPanel = new JPanel(new GridLayout(5, 2));
-	
+
 		nameField = new JTextField();
 		descField = new JTextField();
 		priceField = new JTextField();
 		quantityField = new JTextField();
-	
+
 		addItemFrame = new JFrame("Add item");
 		addItemFrame.setSize(new Dimension(320, 140));
 		addItemFrame.setLocationRelativeTo(null);
 		addItemFrame.setResizable(false);
 		addItemFrame.add(addItemPanel);
 		addItemFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-	
+
 		// add item name textlabel and textfield to panel
 		addItemPanel.add(new JLabel("Name: "));
 		addItemPanel.add(nameField);
@@ -276,17 +276,17 @@ public class StockTab {
 		// add item amount textlabel and textfield to panel
 		addItemPanel.add(new JLabel("Quantity: "));
 		addItemPanel.add(quantityField);
-	
+
 		// Initializing confirm and cancel buttons
 		confirmItemAdd = createItemAddConfirmButton();
 		cancelItemAdd = createItemAddCancelButton();
-	
+
 		// Adding the buttons
 		addItemPanel.add(confirmItemAdd);
 		addItemPanel.add(cancelItemAdd);
 
 		addItemFrame.setVisible(true);
-		toggleButtonsEnable(false);
+		toggleButtonsEnable(true);
 	}
 
 	// Modify item popup screen
@@ -298,7 +298,7 @@ public class StockTab {
 		descField = new JTextField();
 		priceField = new JTextField();
 		quantityField = new JTextField();
-	
+
 		modifyItemFrame = new JFrame("Modify item");
 		modifyItemFrame.setSize(new Dimension(320, 160));
 		modifyItemFrame.setLocationRelativeTo(null);
@@ -321,17 +321,17 @@ public class StockTab {
 		// modify item amount textlabel and textfield to panel
 		modifyItemPanel.add(new JLabel("Quantity: "));
 		modifyItemPanel.add(quantityField);
-	
+
 		// Initializing confirm and cancel buttons
 		confirmItemModify = createItemModifyConfirmButton();
 		cancelItemModify = createItemModifyCancelButton();
-	
+
 		// Adding the buttons
 		modifyItemPanel.add(confirmItemModify);
 		modifyItemPanel.add(cancelItemModify);
 
 		modifyItemFrame.setVisible(true);
-		toggleButtonsEnable(false);
+		toggleButtonsEnable(true);
 	}
 
 	// toggle buttons enable
