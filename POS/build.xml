@@ -2,7 +2,6 @@
 <project basedir="." name="FT Salessystem" default="build">
 
 	<!-- Definitions of variables used during the rest of this script -->
-
 	<property file="build.properties" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
