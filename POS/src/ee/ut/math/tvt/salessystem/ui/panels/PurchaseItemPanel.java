@@ -173,10 +173,19 @@ public class PurchaseItemPanel extends JPanel {
 				quantity = 1;
 			}
 			SoldItem existingItem = getExistingSoldItem(stockItem);
-			int quantityToCheck = existingItem != null ? existingItem.getQuantity() + quantity : quantity;
 
-			if (checkWareHouseInventory(stockItem, quantityToCheck)) {
-				model.getCurrentPurchaseTableModel().addItem(new SoldItem(stockItem, quantity), existingItem);
+			if (existingItem != null && existingItem.getQuantity() + quantity <= 0) {
+				JOptionPane.showMessageDialog(
+					new JFrame(),
+					"Item \"" + existingItem.getName() + "\" amount goes to negative",
+					"Warning",
+					JOptionPane.WARNING_MESSAGE);
+			} else {
+				int quantityToCheck = existingItem != null ? existingItem.getQuantity() + quantity : quantity;
+
+				if (checkWareHouseInventory(stockItem, quantityToCheck)) {
+					model.getCurrentPurchaseTableModel().addItem(new SoldItem(stockItem, quantity), existingItem);
+				}
 			}
 		}
 	}

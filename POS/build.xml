@@ -152,6 +152,7 @@
 			</args>
 		</git>
 	</target>
+
 	<target name="git_tag" description="Makes new tag">
 		<input message="Tag name" addproperty="tag-name" />
 		<input message="Comment" addproperty="tag-comment" />
