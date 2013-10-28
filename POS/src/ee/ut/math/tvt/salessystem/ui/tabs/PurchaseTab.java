@@ -319,7 +319,6 @@ public class PurchaseTab {
 		submitPurchase.setEnabled(true);
 		cancelPurchase.setEnabled(true);
 		newPurchase.setEnabled(false);
-
 	}
 
 	// switch UI to the state that allows to initiate new purchase
