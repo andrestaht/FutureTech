@@ -32,7 +32,6 @@ public class PurchaseItemPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	// Text field on the dialogPane
 	private JComboBox<Object> barCodeComboBox;
 
 	private JTextField quantityField;
@@ -201,6 +200,29 @@ public class PurchaseItemPanel extends JPanel {
 		priceField.setText("");
 	}
 
+	private SoldItem getExistingSoldItem(StockItem stockItem) {
+		try {
+			return model.getCurrentPurchaseTableModel().getItemById(stockItem.getId());
+		}
+		catch (NoSuchElementException e) {
+			return null;
+		}
+	}
+
+	private boolean checkWareHouseInventory(StockItem stockItem, int quantity) {
+		StockItem item = model.getWarehouseTableModel().getItemById(stockItem.getId());
+
+		if (item.getQuantity() < quantity) {
+			JOptionPane.showMessageDialog(
+				new JFrame(),
+				"Item \"" + item.getName() + "\" amount exceeds item quantity in the Warehouse",
+				"Warning",
+				JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+
 	/*
 	 * === Ideally, UI's layout and behavior should be kept as separated as
 	 * possible. If you work on the behavior of the application, you don't want
@@ -240,28 +262,5 @@ public class PurchaseItemPanel extends JPanel {
 		gc.weightx = 1.0;
 		gc.weighty = 1.0;
 		return gc;
-	}
-
-	private SoldItem getExistingSoldItem(StockItem stockItem) {
-		try {
-			return model.getCurrentPurchaseTableModel().getItemById(stockItem.getId());
-		}
-		catch (NoSuchElementException e) {
-			return null;
-		}
-	}
-
-	private boolean checkWareHouseInventory(StockItem stockItem, int quantity) {
-		StockItem item = model.getWarehouseTableModel().getItemById(stockItem.getId());
-
-		if (item.getQuantity() < quantity) {
-			JOptionPane.showMessageDialog(
-				new JFrame(),
-				"Item \"" + item.getName() + "\" amount exceeds item quantity in the Warehouse",
-				"Warning",
-				JOptionPane.WARNING_MESSAGE);
-			return false;
-		}
-		return true;
 	}
 }
