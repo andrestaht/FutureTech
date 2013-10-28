@@ -11,7 +11,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -91,7 +90,6 @@ public class StockTab {
 		modifyItem = createModifyItemButton();
 		panel.add(addItem, gc);
 		panel.add(modifyItem, gc);
-		//panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		return panel;
 	}
 
@@ -159,6 +157,7 @@ public class StockTab {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				toggleButtonsEnable(true);
 				addItemFrame.dispose();
 			}
 		});
@@ -185,6 +184,7 @@ public class StockTab {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				toggleButtonsEnable(true);
 				modifyItemFrame.dispose();
 			}
 		});
@@ -197,7 +197,6 @@ public class StockTab {
 			popAddItemBox();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
-			addItemFrame.dispose();
 		}
 	}
 
@@ -207,7 +206,6 @@ public class StockTab {
 			popModifyItemBox();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
-			addItemFrame.dispose();
 		}
 	}
 
@@ -223,6 +221,7 @@ public class StockTab {
 				throw new Exception();
 			}
 			model.getWarehouseTableModel().addItem(new StockItem(itemName, itemDesc, itemPrice, itemQuantity));
+			toggleButtonsEnable(true);
 			addItemFrame.dispose();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -242,6 +241,7 @@ public class StockTab {
 				throw new Exception();
 			}
 			model.getWarehouseTableModel().modifyItem(new StockItem(itemId, itemName, itemDesc, itemPrice, itemQuantity));
+			toggleButtonsEnable(true);
 			modifyItemFrame.dispose();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, try again", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -286,6 +286,7 @@ public class StockTab {
 		addItemPanel.add(cancelItemAdd);
 
 		addItemFrame.setVisible(true);
+		toggleButtonsEnable(false);
 	}
 
 	// Modify item popup screen
@@ -330,6 +331,13 @@ public class StockTab {
 		modifyItemPanel.add(cancelItemModify);
 
 		modifyItemFrame.setVisible(true);
+		toggleButtonsEnable(false);
+	}
+
+	// toggle buttons enable
+	private void toggleButtonsEnable(boolean enable) {
+		addItem.setEnabled(enable);
+		modifyItem.setEnabled(enable);
 	}
 
 	// The constraints that control the layout of the buttons in the purchase menu
