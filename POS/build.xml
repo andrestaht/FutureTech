@@ -117,6 +117,19 @@
 		</sequential>
 	</macrodef>
 
+	<target name="git_setPushDefault" description="Sets --global push.default in config">
+		<input message="push.default value" addproperty="push-default" />
+		<echo message="Setting global push default to ${push-default} in config" />
+		
+		<git command="config">
+			<args>
+				<arg value="--global" />
+				<arg value="push.default" />
+				<arg value="${push-default}" />
+			</args>
+		</git>
+	</target>
+
 	<target name="git_commit" description="Commits all changes to version git">
 		<input message="Commit message" addproperty="commit-message" />
 		<input message="Github username" addproperty="username" />
