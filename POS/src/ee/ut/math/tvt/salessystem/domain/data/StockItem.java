@@ -4,6 +4,8 @@ package ee.ut.math.tvt.salessystem.domain.data;
  * Stock item. Corresponds to the Data Transfer Object design pattern.
  */
 public class StockItem implements Cloneable, DisplayableItem {
+	
+	private static long ID = 1;
 
 	private Long id;
 
@@ -28,6 +30,7 @@ public class StockItem implements Cloneable, DisplayableItem {
 		this.name = name;
 		this.description = desc;
 		this.price = price;
+		ID += 1;
 	}
 
 	public StockItem(Long id, String name, String desc, double price, int quantity) {
@@ -36,6 +39,16 @@ public class StockItem implements Cloneable, DisplayableItem {
 		this.description = desc;
 		this.price = price;
 		this.quantity = quantity;
+		ID += 1;
+	}
+
+	public StockItem(String name, String desc, double price, int quantity) {
+		this.name = name;
+		this.description = desc;
+		this.price = price;
+		this.quantity = quantity;
+		this.id = ID;
+		ID += 1;
 	}
 
 	/**
