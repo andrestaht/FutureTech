@@ -2,6 +2,7 @@
 <project basedir="." name="FT Salessystem" default="build">
 
 	<!-- Definitions of variables used during the rest of this script -->
+
 	<property file="build.properties" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
@@ -9,14 +10,25 @@
 	<property name="dist.dir" value="${build.classes.dir}/jar" />
 	<property name="conf.dir" value="${basedir}/conf" />
 	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="lib.hibernate.dir" value="${lib.dir}/hibernate" />
 	<property name="doc.dir" value="${build.dir}/doc" />
+	<property name="data.dir" value="${basedir}/data" />
 	<property name="test.reports.dir" value="${build.dir}/reports/" />
 	<property name="version.properties" value="${conf.dir}/version.properties" />
-	
+
+	<!-- Database variables -->
+
+	<property name="db.file" value="${data.dir}/POSdb" />
+	<property name="db.alias" value="POS" />
+	<property name="db.url" value="jdbc:hsqldb:hsql://localhost/POS" />
+
 	<!-- Definitions of classpath variants used for different tasks -->
 
 	<path id="compile.classpath">
-		<fileset dir="lib">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.hibernate.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
@@ -25,26 +37,42 @@
 		<pathelement location="${build.classes.dir}" />
 		<!-- configuration -->
 		<pathelement location="${conf.dir}" />
-		<fileset dir="lib">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.hibernate.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
 
-	<!-- Definitions of runnable ant targets. Run them from the command line 
-		by executing "ant [targetname]" -->
-	<target name="dist" depends="build" description="Make a project jar file" >
-		<antcall target="revision"></antcall>
-		<mkdir dir="${dist.dir}"/>
+	<!-- Definitions of runnable ant targets -->
 
+	<target name="clean" description="Clean up build system results">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="build" depends="clean" description="Build the system">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
+			target="1.7" source="1.7" includeantruntime="false">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="dist" depends="build" description="Make a project jar file">
+		<antcall target="revision"></antcall>
+		<mkdir dir="${dist.dir}" />
 		<!-- copy libraries to dist -->
 		<copy todir="${dist.dir}">
 			<fileset dir="." includes="lib/*.jar conf/*.properties etc/" />
 		</copy>
-		<jar destfile="${dist.dir}/FutureTech.jar" basedir="${build.classes.dir}"> 
-			<!-- includes="${conf.dir}/**,${basedir}/etc/**,${lib.dir}/** "-->
+		<jar destfile="${dist.dir}/FutureTech.jar" basedir="${build.classes.dir}">
+			<!-- includes="${conf.dir}/**,${basedir}/etc/**,${lib.dir}/** " -->
 			<manifest>
-				<attribute name="Main-Class" value="ee.ut.math.tvt.FutureTech.Intro"/>
-				<attribute name="Class-Path" value=". lib/log4j-1.2.17.jar lib/miglayout-4.0.jar lib/jgoodies-looks-2.5.3.jar lib/jgoodies-common-1.4.0.jar ./conf/"/>
+				<attribute name="Main-Class" value="ee.ut.math.tvt.FutureTech.Intro" />
+				<attribute name="Class-Path"
+					value=". lib/log4j-1.2.17.jar lib/miglayout-4.0.jar lib/jgoodies-looks-2.5.3.jar lib/jgoodies-common-1.4.0.jar ./conf/" />
 			</manifest>
 		</jar>
 	</target>
@@ -53,42 +81,34 @@
 		<propertyfile file="${version.properties}">
 			<entry key="build.revision.number" type="int" operation="+" value="1" pattern="00" />
 		</propertyfile>
-
-		<property file="${version.properties}"/>
-
+		<property file="${version.properties}" />
 		<propertyfile file="${version.properties}">
 			<entry key="build.number" value="${build.major.number}.${build.minor.number}.${build.revision.number}" />
 		</propertyfile>
 	</target>
 
 	<target name="jrun" depends="dist" description="Runs the jar file">
-		<java jar="${dist.dir}/FutureTech.jar" fork="true"/> 
+		<java jar="${dist.dir}/FutureTech.jar" fork="true" />
 	</target>
 
-	<target name="run" depends="build" description="Run the template application">
-		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath" fork="yes">
+	<target name="run" depends="startdb" description="Run the template application">
+		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
+			fork="yes">
 			<jvmarg value="-Xdebug" />
-			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
+			<jvmarg
+				value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
 		</java>
 	</target>
 
-	<target name="runc" depends="build" description="Run the application (console)">
-		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath" fork="yes">
+	<target name="runc" depends="startdb" description="Run the application (console)">
+		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
+			fork="yes">
 			<arg value="console" />
 		</java>
 	</target>
 
-	<target name="build" depends="clean" description="Build the system">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${build.classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true"
-			debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
-			target="1.7" source="1.7" includeantruntime="false">
-			<classpath refid="compile.classpath" />
-		</javac>
-	</target>
-
 	<!-- Build internal documentation -->
+
 	<target name="javadoc" description="Build internal documentation">
 		<mkdir dir="${doc.dir}" />
 		<javadoc destdir="${doc.dir}" classpathref="compile.classpath">
@@ -96,12 +116,7 @@
 		</javadoc>
 	</target>
 
-	<!-- Clean up build system results -->
-	<target name="clean" description="Clean up build system results">
-		<delete dir="${build.dir}" />
-	</target>
-
-	<!-- Git commands -->
+	<!-- Git targets -->
 
 	<macrodef name="git">
 		<attribute name="command" />
@@ -112,7 +127,7 @@
 			<echo message="git @{command}" />
 			<exec executable="git" dir="@{dir}">
 				<arg value="@{command}" />
-				<args/>
+				<args />
 			</exec>
 		</sequential>
 	</macrodef>
@@ -171,5 +186,20 @@
 				<arg value="--tags" />
 			</args>
 		</git>
+	</target>
+
+	<!-- Database targets -->
+
+	<target name="dbmanager" description="Start the HSQLDB manager">
+		<java classname="org.hsqldb.util.DatabaseManagerSwing"
+			classpathref="test.classpath" fork="yes">
+			<arg line="--user sa --url ${db.url}" />
+		</java>
+	</target>
+
+	<target name="startdb" depends="build" description="Start the HSQLDB with the default params">
+		<java classname="org.hsqldb.Server" classpathref="test.classpath" fork="yes">
+			<arg line="-database.0 '${db.file}' -dbname.0 '${db.alias}'" />
+		</java>
 	</target>
 </project>

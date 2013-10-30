@@ -42,7 +42,7 @@ public class SalesSystemUI extends JFrame {
 	 * 
 	 * @param domainController - Sales domain controller.
 	 */
-	public SalesSystemUI(SalesDomainController domainController) {
+	public SalesSystemUI(final SalesDomainController domainController) {
 		this.domainController = domainController;
 		this.model = new SalesSystemModel(domainController);
 		// Create singleton instances of the tab classes
@@ -67,6 +67,7 @@ public class SalesSystemUI extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
+				domainController.endSession();
 				System.exit(0);
 			}
 		});
