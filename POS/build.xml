@@ -91,7 +91,7 @@
 		<java jar="${dist.dir}/FutureTech.jar" fork="true" />
 	</target>
 
-	<target name="run" depends="startdb" description="Run the template application">
+	<target name="run" depends="build" description="Run the template application">
 		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
 			fork="yes">
 			<jvmarg value="-Xdebug" />
@@ -100,7 +100,7 @@
 		</java>
 	</target>
 
-	<target name="runc" depends="startdb" description="Run the application (console)">
+	<target name="runc" depends="build" description="Run the application (console)">
 		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
 			fork="yes">
 			<arg value="console" />
@@ -197,7 +197,7 @@
 		</java>
 	</target>
 
-	<target name="startdb" depends="build" description="Start the HSQLDB with the default params">
+	<target name="startdb" description="Start the HSQLDB with the default params">
 		<java classname="org.hsqldb.Server" classpathref="test.classpath" fork="yes">
 			<arg line="-database.0 '${db.file}' -dbname.0 '${db.alias}'" />
 		</java>
