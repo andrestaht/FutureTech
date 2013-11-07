@@ -1,11 +1,14 @@
 package ee.ut.math.tvt.salessystem.domain.data;
 
 import java.util.List;
-
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "ACCEPTEDORDER")
 public class AcceptedOrder implements DisplayableItem{
 
 	private static long ID = 1;

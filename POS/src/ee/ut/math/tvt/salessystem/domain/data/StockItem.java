@@ -5,18 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * Stock item. Corresponds to the Data Transfer Object design pattern.
- */
 @Entity
 @Table(name = "STOCKITEM")
 public class StockItem implements Cloneable, DisplayableItem {
-	
-	
+
 	private static long ID = 1;
 
 	@Id
-    @Column (name = "id")
+	@Column (name = "id")
 	private Long id;
 
 	@Column(name = "name")
@@ -71,7 +67,7 @@ public class StockItem implements Cloneable, DisplayableItem {
 	public StockItem() {
 	}
 
-	
+
 	public String getDescription() {
 		return description;
 	}
