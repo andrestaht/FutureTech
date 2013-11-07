@@ -19,6 +19,8 @@ import net.miginfocom.swing.MigLayout;
 
 public class IntroUI extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	private final Logger log = Logger.getLogger(IntroUI.class);
 
 	private final JPanel contentPane = new JPanel();

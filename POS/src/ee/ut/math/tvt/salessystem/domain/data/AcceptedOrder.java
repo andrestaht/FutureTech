@@ -14,7 +14,7 @@ public class AcceptedOrder implements DisplayableItem{
 	private static long ID = 1;
 
 	@Id
-	@Column (name = "id")
+	@Column(name = "id")
 	private final Long id;
 
 	@OneToMany(mappedBy = "acceptedOrder")

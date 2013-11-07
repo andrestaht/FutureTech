@@ -12,7 +12,7 @@ public class StockItem implements Cloneable, DisplayableItem {
 	private static long ID = 1;
 
 	@Id
-	@Column (name = "id")
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "name")
