@@ -2,11 +2,9 @@ package ee.ut.math.tvt.salessystem.domain.data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * Already bought StockItem. SoldItem duplicates name and price for preserving
@@ -17,9 +15,10 @@ import javax.persistence.Transient;
 public class SoldItem implements Cloneable, DisplayableItem {
 
 	@Id
+	@Column (name = "id")
 	private Long id;
 
-	@Transient
+	@OneToOne
 	private StockItem stockItem;
 
 	@Column(name = "name")

@@ -2,8 +2,6 @@ package ee.ut.math.tvt.salessystem.domain.data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,7 +16,7 @@ public class StockItem implements Cloneable, DisplayableItem {
 	private static long ID = 1;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
 	private Long id;
 
 	@Column(name = "name")
