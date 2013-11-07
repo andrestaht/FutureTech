@@ -26,7 +26,7 @@ public class SoldItem implements Cloneable, DisplayableItem {
 	@Column(name = "quantity")
 	private Integer quantity;
 
-	@Column(name = "price")
+	@Column(name = "itemprice")
 	private double price;
 
 	@ManyToOne

@@ -17,7 +17,7 @@ public class AcceptedOrder implements DisplayableItem{
 	@Column (name = "id")
 	private final Long id;
 
-	@OneToMany(mappedBy = "acceptedorder")
+	@OneToMany(mappedBy = "acceptedOrder")
 	private final List<SoldItem> soldItems;
 
 	@Column(name = "date")
