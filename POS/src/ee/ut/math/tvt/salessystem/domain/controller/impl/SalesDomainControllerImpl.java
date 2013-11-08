@@ -12,21 +12,26 @@ import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
-/**
- * Implementation of the sales domain controller.
- */
 public class SalesDomainControllerImpl implements SalesDomainController {
+
+	private final Session session = HibernateUtil.currentSession();
 
 	private static final Logger log = Logger.getLogger(SalesDomainControllerImpl.class);
 
 	@Override
-	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException {
-		saveEntities(goods);
+	public List<StockItem> loadWarehouseState() {
+		// TODO
+		return new ArrayList<StockItem>();
 	}
 
 	@Override
-	public void cancelCurrentPurchase() throws VerificationFailedException {
-		// TODO
+	public List<SoldItem> loadHistory() {
+		return null; // TODO
+	}
+
+	@Override
+	public List<StockItem> loadCurrentPurchase() {
+		return null; // TODO if we create Purchase object and DB then it should return Purchase object
 	}
 
 	@Override
@@ -35,18 +40,33 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 
 	@Override
-	public List<StockItem> loadWarehouseState() {
-		// XXX mock implementation
-		List<StockItem> dataset = new ArrayList<StockItem>();
-		StockItem chips = new StockItem(1l, "Lays chips", "Potato chips", 11.0, 5);
-		StockItem chupaChups = new StockItem(2l, "Chupa-chups", "Sweets", 8.0, 8);
-		StockItem frankfurters = new StockItem(3l, "Frankfurters", "Beer sauseges", 15.0, 12);
-		StockItem beer = new StockItem(4l, "Free Beer", "Student's delight", 0.0, 100);
-		dataset.add(chips);
-		dataset.add(chupaChups);
-		dataset.add(frankfurters);
-		dataset.add(beer);
-		return dataset;
+	public void addNewPurchaseItem(StockItem good) {
+		// TODO
+	}
+
+	@Override
+	public void modifyPurchaseItem(StockItem good) {
+		// TODO
+	}
+
+	@Override
+	public void cancelCurrentPurchase() throws VerificationFailedException {
+		// TODO
+	}
+
+	@Override
+	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException {
+		saveEntities(goods);
+	}
+
+	@Override
+	public void addNewStockItem(StockItem good) {
+		// TODO
+	}
+
+	@Override
+	public void modifyStockItem(StockItem good) {
+		// TODO
 	}
 
 	@Override
@@ -56,7 +76,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 	private void saveEntities(List<? extends DisplayableItem> items) throws VerificationFailedException {
 		Transaction transaction = null;
-		Session session = HibernateUtil.currentSession();
 
 		try {
 			transaction = session.beginTransaction();

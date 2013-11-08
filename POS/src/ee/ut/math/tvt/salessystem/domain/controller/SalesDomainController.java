@@ -11,35 +11,25 @@ import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
  */
 public interface SalesDomainController {
 
-	/**
-	 * Load the current state of the warehouse.
-	 * 
-	 * @return List of ${link ee.ut.math.tvt.salessystem.domain.data.StockItem}s.
-	 */
 	public List<StockItem> loadWarehouseState();
 
-	// business processes
-	/**
-	 * Initiate new business transaction - purchase of the goods.
-	 * 
-	 * @throws VerificationFailedException
-	 */
+	public List<SoldItem> loadHistory();
+
+	public List<StockItem> loadCurrentPurchase();
+
 	public void startNewPurchase() throws VerificationFailedException;
 
-	/**
-	 * Rollback business transaction - purchase of goods.
-	 * 
-	 * @throws VerificationFailedException
-	 */
+	public void addNewPurchaseItem(StockItem good);
+
+	public void modifyPurchaseItem(StockItem good);
+
 	public void cancelCurrentPurchase() throws VerificationFailedException;
 
-	/**
-	 * Commit business transaction - purchsae of goods.
-	 * 
-	 * @param goods - Goods that the buyer has chosen to buy.
-	 * @throws VerificationFailedException
-	 */
 	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException;
+
+	public void addNewStockItem(StockItem good);
+
+	public void modifyStockItem(StockItem good);
 
 	public void endSession();
 }
