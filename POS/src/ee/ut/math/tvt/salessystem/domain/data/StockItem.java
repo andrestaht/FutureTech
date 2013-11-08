@@ -67,7 +67,6 @@ public class StockItem implements Cloneable, DisplayableItem {
 	public StockItem() {
 	}
 
-
 	public String getDescription() {
 		return description;
 	}

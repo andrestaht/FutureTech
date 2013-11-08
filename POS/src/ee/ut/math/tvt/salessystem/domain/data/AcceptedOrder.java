@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ACCEPTEDORDER")
-public class AcceptedOrder implements DisplayableItem{
+public class AcceptedOrder implements DisplayableItem {
 
 	private static long ID = 1;
 
