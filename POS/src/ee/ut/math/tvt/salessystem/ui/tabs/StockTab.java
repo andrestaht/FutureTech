@@ -1,8 +1,8 @@
 package ee.ut.math.tvt.salessystem.ui.tabs;
 
+import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -11,7 +11,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,7 +56,10 @@ public class StockTab {
 
 	private final SalesSystemModel model;
 
-	public StockTab(SalesSystemModel model) {
+	private final SalesDomainController domainController;
+
+	public StockTab(SalesDomainController controller, SalesSystemModel model) {
+		this.domainController = controller;
 		this.model = model;
 	}
 
@@ -220,7 +222,10 @@ public class StockTab {
 			if (itemName.isEmpty() || itemDesc.isEmpty() || itemPrice < 0 || itemQuantity <= 0) {
 				throw new Exception();
 			}
-			model.getWarehouseTableModel().addItem(new StockItem(itemName, itemDesc, itemPrice, itemQuantity));
+			StockItem newItem = new StockItem(itemName, itemDesc, itemPrice, itemQuantity);
+
+			model.getWarehouseTableModel().addItem(newItem);
+			domainController.addNewStockItem(newItem);
 			toggleButtonsEnable(true);
 			addItemFrame.dispose();
 		} catch (Exception e) {
@@ -240,7 +245,10 @@ public class StockTab {
 			if (itemId < 0 || itemName.isEmpty() || itemDesc.isEmpty() || itemPrice < 0 || itemQuantity <= 0) {
 				throw new Exception();
 			}
-			model.getWarehouseTableModel().modifyItem(new StockItem(itemId, itemName, itemDesc, itemPrice, itemQuantity));
+			StockItem item = new StockItem(itemId, itemName, itemDesc, itemPrice, itemQuantity);
+
+			model.getWarehouseTableModel().modifyItem(item);
+			domainController.modifyStockItem(item);
 			toggleButtonsEnable(true);
 			modifyItemFrame.dispose();
 		} catch (Exception e) {

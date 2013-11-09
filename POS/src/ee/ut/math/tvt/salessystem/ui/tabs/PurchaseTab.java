@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
+import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
 import ee.ut.math.tvt.salessystem.ui.panels.PurchaseItemPanel;
@@ -263,7 +265,6 @@ public class PurchaseTab {
 	protected void makePurchaseButtonClicked() {
 		try {
 			log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
-			domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
 			endSale();
 			confirmationFrame.dispose();
 			savePurchase();
@@ -274,15 +275,19 @@ public class PurchaseTab {
 		}
 	}
 
-	// Saving the current purchase
-	protected void savePurchase(){
+	protected void savePurchase() throws VerificationFailedException {
+		domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
+
 		AcceptedOrder order = new AcceptedOrder(
 			model.getCurrentPurchaseTableModel().getTableRows(),
 			((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()),
 			((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime())
 			);
 		model.getHistoryTableModel().addOrder(order);
-		model.getWarehouseTableModel().decreaseItemsQuantity(order.getSoldItems());
+		domainController.addNewOrder(order);
+
+		List<StockItem> goods = model.getWarehouseTableModel().decreaseItemsQuantity(order.getSoldItems());
+		domainController.modifyStockItems(goods);
 	}
 
 	/** Event handler for the <code>return to purchase</code> event. */

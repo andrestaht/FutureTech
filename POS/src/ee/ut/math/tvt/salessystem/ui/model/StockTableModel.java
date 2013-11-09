@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
@@ -68,13 +69,18 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		fireTableDataChanged();
 	}
 
-	public void decreaseItemsQuantity(List<SoldItem> soldItems) {
+	public List<StockItem> decreaseItemsQuantity(List<SoldItem> soldItems) {
+		List<StockItem> modifiedItems = new ArrayList<StockItem>();
+
 		for(SoldItem soldItem : soldItems) {
 			StockItem item = getItemById(soldItem.getId());
 			item.setQuantity(item.getQuantity() - soldItem.getQuantity());
+			modifiedItems.add(item);
+
 			log.debug("Decreased quatity of product " + item.getName() + " by " + soldItem.getQuantity());
 			fireTableDataChanged();
 		}
+		return modifiedItems;
 	}
 
 	@Override

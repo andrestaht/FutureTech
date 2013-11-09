@@ -15,7 +15,7 @@ public class SalesSystemModel {
 
 	// Current shopping cart model
 	private final PurchaseInfoTableModel currentPurchaseTableModel;
-	
+
 	//History model
 	private final HistoryTableModel historyTableModel;
 	private final DetailedHistoryTableModel detailedHistoryTable;
@@ -25,8 +25,7 @@ public class SalesSystemModel {
 	/**
 	 * Construct application model.
 	 * 
-	 * @param domainController
-	 *          Sales domain controller.
+	 * @param domainController Sales domain controller.
 	 */
 	public SalesSystemModel(SalesDomainController domainController) {
 		this.domainController = domainController;
@@ -34,14 +33,17 @@ public class SalesSystemModel {
 		currentPurchaseTableModel = new PurchaseInfoTableModel();
 		historyTableModel = new HistoryTableModel();
 		detailedHistoryTable = new DetailedHistoryTableModel();
-		// populate stock model with data from the warehouse
+
 		warehouseTableModel.populateWithData(domainController.loadWarehouseState());
+		currentPurchaseTableModel.populateWithData(domainController.loadCurrentPurchase());
+		historyTableModel.populateWithData(domainController.loadHistory());
+		log.info("Data loading from DB was successful");
 	}
 
 	public HistoryTableModel getHistoryTableModel() {
 		return historyTableModel;
 	}
-	
+
 	public DetailedHistoryTableModel getDetailedHistoryTable() {
 		return detailedHistoryTable;
 	}

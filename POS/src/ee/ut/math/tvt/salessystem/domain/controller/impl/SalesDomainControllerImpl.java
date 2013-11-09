@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
+import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
 import ee.ut.math.tvt.salessystem.domain.data.DisplayableItem;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
@@ -25,13 +26,15 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 
 	@Override
-	public List<SoldItem> loadHistory() {
-		return null; // TODO
+	public List<AcceptedOrder> loadHistory() {
+		// TODO
+		return new ArrayList<AcceptedOrder>();
 	}
 
 	@Override
-	public List<StockItem> loadCurrentPurchase() {
-		return null; // TODO if we create Purchase object and DB then it should return Purchase object
+	public List<SoldItem> loadCurrentPurchase() {
+		// TODO
+		return new ArrayList<SoldItem>();
 	}
 
 	@Override
@@ -66,6 +69,16 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 	@Override
 	public void modifyStockItem(StockItem good) {
+		// TODO
+	}
+
+	@Override
+	public void modifyStockItems(List<StockItem> goods) {
+		// TODO
+	}
+
+	@Override
+	public void addNewOrder(AcceptedOrder order) {
 		// TODO
 	}
 
