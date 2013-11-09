@@ -1,7 +1,9 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
 import org.apache.log4j.Logger;
+
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
+import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 
 /**
  * Main model. Holds all the other models.
@@ -35,7 +37,6 @@ public class SalesSystemModel {
 		detailedHistoryTable = new DetailedHistoryTableModel();
 
 		warehouseTableModel.populateWithData(domainController.loadWarehouseState());
-		currentPurchaseTableModel.populateWithData(domainController.loadCurrentPurchase());
 		historyTableModel.populateWithData(domainController.loadHistory());
 		log.info("Data loading from DB was successful");
 	}

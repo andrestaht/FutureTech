@@ -16,7 +16,7 @@ public interface SalesDomainController {
 
 	public List<AcceptedOrder> loadHistory();
 
-	public List<SoldItem> loadCurrentPurchase();
+	public List<SoldItem> loadSoldItems();
 
 	public void startNewPurchase() throws VerificationFailedException;
 
@@ -28,11 +28,11 @@ public interface SalesDomainController {
 
 	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException;
 
-	public void addNewStockItem(StockItem good);
+	public void addNewStockItem(StockItem good) throws VerificationFailedException;
 
-	public void modifyStockItem(StockItem good);
+	public void modifyStockItem(StockItem good) throws VerificationFailedException;
 
-	public void modifyStockItems(List<StockItem> goods);
+	public void modifyStockItems(List<StockItem> goods) throws VerificationFailedException;
 
 	public void addNewOrder(AcceptedOrder order);
 

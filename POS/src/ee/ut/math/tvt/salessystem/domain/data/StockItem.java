@@ -65,6 +65,7 @@ public class StockItem implements Cloneable, DisplayableItem {
 	 * Constructs new <code>StockItem</code>.
 	 */
 	public StockItem() {
+		ID += 1;
 	}
 
 	public String getDescription() {
