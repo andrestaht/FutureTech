@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -21,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
+import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
@@ -42,11 +41,12 @@ public class PurchaseItemPanel extends JPanel {
 	private JTextField priceField;
 
 	private JButton addItemButton;
-	
+
 	private DefaultComboBoxModel<String> comboBoxModel;
 
-	// Warehouse model
 	private final SalesSystemModel model;
+
+	private final SalesDomainController domainController;
 
 	/**
 	 * Constructs new purchase item panel.
@@ -54,7 +54,8 @@ public class PurchaseItemPanel extends JPanel {
 	 * @param model
 	 *          composite model of the warehouse and the shopping cart.
 	 */
-	public PurchaseItemPanel(SalesSystemModel model) {
+	public PurchaseItemPanel(SalesDomainController controller, SalesSystemModel model) {
+		this.domainController = controller;
 		this.model = model;
 		setLayout(new GridBagLayout());
 		add(drawDialogPane(), getDialogPaneConstraints());
@@ -124,7 +125,7 @@ public class PurchaseItemPanel extends JPanel {
 		panel.add(addItemButton);
 		return panel;
 	}
-	
+
 	// Gets the necessary data for the combobox
 	public void updateComboBoxData() {
 		comboBoxModel.removeAllElements();
@@ -196,10 +197,18 @@ public class PurchaseItemPanel extends JPanel {
 					"Warning",
 					JOptionPane.WARNING_MESSAGE);
 			} else {
-				int quantityToCheck = existingItem != null ? existingItem.getQuantity() + quantity : quantity;
+				quantity = existingItem != null ? existingItem.getQuantity() + quantity : quantity;
 
-				if (checkWareHouseInventory(stockItem, quantityToCheck)) {
-					model.getCurrentPurchaseTableModel().addItem(new SoldItem(stockItem, quantity), existingItem);
+				if (checkWareHouseInventory(stockItem, quantity)) {
+					if (existingItem == null) {
+						SoldItem newItem = new SoldItem(stockItem, quantity);
+
+						model.getCurrentPurchaseTableModel().addItem(newItem);
+						domainController.addNewSoldItem(newItem);
+					} else {
+						model.getCurrentPurchaseTableModel().updateItem(existingItem, quantity);
+						domainController.modifySoldItem(existingItem);
+					}
 				}
 			}
 		}

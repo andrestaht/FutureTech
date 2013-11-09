@@ -20,9 +20,9 @@ public interface SalesDomainController {
 
 	public void startNewPurchase() throws VerificationFailedException;
 
-	public void addNewPurchaseItem(StockItem good);
+	public void addNewSoldItem(SoldItem good);
 
-	public void modifyPurchaseItem(StockItem good);
+	public void modifySoldItem(SoldItem good);
 
 	public void cancelCurrentPurchase() throws VerificationFailedException;
 

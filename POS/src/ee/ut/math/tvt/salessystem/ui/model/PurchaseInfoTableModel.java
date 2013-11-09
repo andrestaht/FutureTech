@@ -59,17 +59,15 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 		return purchaseSum.toString();
 	}
 
-	/**
-	 * Add new StockItem to table.
-	 */
-	public void addItem(final SoldItem item, SoldItem existingItem) {
-		if (existingItem != null) {
-			existingItem.setQuantity(item.getQuantity() + existingItem.getQuantity());
-			log.debug("Found existing item " + item.getName() + " increased quantity by " + item.getQuantity());
-		} else {
-			rows.add(item);
-			log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());
-		}
+	public void addItem(SoldItem item) {
+		rows.add(item);
+		log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());
+		fireTableDataChanged();
+	}
+
+	public void updateItem(SoldItem item, Integer quantity) {
+		item.setQuantity(quantity);
+		log.debug("Found existing item " + item.getName() + " and updated the quantity to " + quantity);
 		fireTableDataChanged();
 	}
 
