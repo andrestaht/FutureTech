@@ -44,7 +44,33 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-
+	
+	<!-- Classpaths of .jar files in folders lib and lib/hibernate that are needed for manifest -->
+	
+	<pathconvert property="manifest.classpath.lib" pathsep=" ">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	 	<mapper>
+	    	<chainedmapper>
+	    		<flattenmapper/>
+	    		<globmapper from="*.jar" to="lib/*.jar"/>
+	    	</chainedmapper>
+		</mapper>
+	</pathconvert>
+		
+	<pathconvert property="manifest.classpath.lib.hibernate" pathsep=" ">
+		<fileset dir="${lib.hibernate.dir}">
+			<include name="*.jar" />
+		</fileset>
+	 	<mapper>
+	    	<chainedmapper>
+	    		<flattenmapper/>
+	    		<globmapper from="*.jar" to="lib/hibernate/*.jar"/>
+	    	</chainedmapper>
+		</mapper>
+	</pathconvert>
+	
 	<!-- Definitions of runnable ant targets -->
 
 	<target name="clean" description="Clean up build system results">
@@ -65,14 +91,14 @@
 		<mkdir dir="${dist.dir}" />
 		<!-- copy libraries to dist -->
 		<copy todir="${dist.dir}">
-			<fileset dir="." includes="lib/*.jar conf/*.properties etc/" />
+			<fileset dir="." includes="lib/ conf/ etc/ data/*.properties data/*.script" />
 		</copy>
 		<jar destfile="${dist.dir}/FutureTech.jar" basedir="${build.classes.dir}">
 			<!-- includes="${conf.dir}/**,${basedir}/etc/**,${lib.dir}/** " -->
 			<manifest>
 				<attribute name="Main-Class" value="ee.ut.math.tvt.FutureTech.Intro" />
-				<attribute name="Class-Path"
-					value=". lib/log4j-1.2.17.jar lib/miglayout-4.0.jar lib/jgoodies-looks-2.5.3.jar lib/jgoodies-common-1.4.0.jar ./conf/" />
+				<attribute name="Class-Path" 
+					value=". ${manifest.classpath.lib} ${manifest.classpath.lib.hibernate} ./conf/" />
 			</manifest>
 		</jar>
 	</target>
