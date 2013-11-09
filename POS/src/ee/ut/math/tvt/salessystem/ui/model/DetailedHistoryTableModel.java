@@ -6,11 +6,10 @@ import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 
-
 public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger log = Logger.getLogger(HistoryTableModel.class);
 
 	public DetailedHistoryTableModel() {
@@ -33,9 +32,9 @@ public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 		}
 		throw new IllegalArgumentException("Column index out of range");
 	}
-	
+
 	/**
-	 * Add items to the detailed history table. 
+	 * Add items to the detailed history table.
 	 * 
 	 * @param item
 	 */
