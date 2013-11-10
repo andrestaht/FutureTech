@@ -281,8 +281,6 @@ public class PurchaseTab {
 	}
 
 	protected void savePurchase() throws VerificationFailedException {
-		domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
-
 		AcceptedOrder order = new AcceptedOrder(
 			model.getCurrentPurchaseTableModel().getTableRows(),
 			((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()),
@@ -293,12 +291,12 @@ public class PurchaseTab {
 
 		List<StockItem> goods = model.getWarehouseTableModel().decreaseItemsQuantity(order.getSoldItems());
 		domainController.modifyStockItems(goods);
-		
-		List<SoldItem> goodsWithId = order.getSoldItems();
-		for (SoldItem each : goodsWithId) {
-			each.setAcceptedOrder(order);
+		List<SoldItem> soldItems = order.getSoldItems();
+
+		for (SoldItem item : soldItems) {
+			item.setAcceptedOrder(order);
 		}
-		domainController.addNewSoldItems(goodsWithId);
+		domainController.submitCurrentPurchase(soldItems);
 	}
 
 	/** Event handler for the <code>return to purchase</code> event. */

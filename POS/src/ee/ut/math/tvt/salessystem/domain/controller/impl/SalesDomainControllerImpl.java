@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -30,33 +29,27 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 	@Override
 	public List<AcceptedOrder> loadHistory() {
-		/*List<AcceptedOrder> orders = session.createQuery("from AcceptedOrder").list();
-		
+		List<AcceptedOrder> orders = session.createQuery("from AcceptedOrder").list();
+
 		for (AcceptedOrder order : orders) {
 			order.setSoldItems(session.createQuery("from SoldItem where acceptedorder_id = " + order.getId()).list());
 		}
-		return orders;*/
-		return session.createQuery("from AcceptedOrder").list();
+		return orders;
 	}
 
 	@Override
 	public void startNewPurchase() throws VerificationFailedException {
-		// TODO don't know what this should do
-	}
-
-	public void addNewSoldItems(List<SoldItem> goods) throws VerificationFailedException {
-		saveEntities(goods);	
+		// TODO
 	}
 
 	@Override
 	public void cancelCurrentPurchase() throws VerificationFailedException {
-		// TODO should delete all the created sold items that aren't connected to any accepted order
+		// TODO
 	}
 
 	@Override
 	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException {
-		// TODO sold items must have accepted order, before saving them into to the DB
-		//saveEntities(goods); TODO should update the entities
+		saveEntities(goods);
 	}
 
 	@Override

@@ -233,7 +233,7 @@ public class PurchaseItemPanel extends JPanel {
 
 	private SoldItem getExistingSoldItem(StockItem stockItem) {
 		try {
-			return model.getCurrentPurchaseTableModel().getItemById(stockItem.getId());
+			return model.getCurrentPurchaseTableModel().getItemByStockItem(stockItem);
 		}
 		catch (NoSuchElementException e) {
 			return null;

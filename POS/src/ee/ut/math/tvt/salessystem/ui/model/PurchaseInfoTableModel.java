@@ -1,7 +1,9 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
+import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
+import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 
 /**
  * Purchase history details model.
@@ -20,7 +22,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	protected Object getColumnValue(SoldItem item, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return item.getId();
+			return item.getStockItemId();
 		case 1:
 			return item.getName();
 		case 2:
@@ -41,7 +43,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 		}
 		buffer.append("\n");
 		for (final SoldItem item : rows) {
-			buffer.append(item.getId() + "\t");
+			buffer.append(item.getStockItemId() + "\t");
 			buffer.append(item.getName() + "\t");
 			buffer.append(item.getPrice() + "\t");
 			buffer.append(item.getQuantity() + "\t");
@@ -78,5 +80,14 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 			}
 		}
 		return false;
+	}
+
+	public SoldItem getItemByStockItem(StockItem stockItem) {
+		for (final SoldItem item : rows) {
+			if (item.getStockItemId() == stockItem.getId()) {
+				return item;
+			}
+		}
+		throw new NoSuchElementException();
 	}
 }

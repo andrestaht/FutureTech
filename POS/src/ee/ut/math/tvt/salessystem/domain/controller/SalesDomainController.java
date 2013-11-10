@@ -17,8 +17,6 @@ public interface SalesDomainController {
 	public List<AcceptedOrder> loadHistory();
 
 	public void startNewPurchase() throws VerificationFailedException;
-	
-	public void addNewSoldItems(List<SoldItem> goods) throws VerificationFailedException;
 
 	public void cancelCurrentPurchase() throws VerificationFailedException;
 
