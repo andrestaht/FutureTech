@@ -40,6 +40,9 @@ public class SoldItem implements Cloneable, DisplayableItem {
 		this.price = stockItem.getPrice();
 		this.quantity = quantity;
 	}
+	
+	public SoldItem() {
+	}
 
 	@Override
 	public Long getId() {
