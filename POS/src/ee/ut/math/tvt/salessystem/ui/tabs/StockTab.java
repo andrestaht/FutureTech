@@ -215,7 +215,7 @@ public class StockTab {
 	protected void confirmItemAddButtonClicked() {
 		try {
 			String itemName = nameField.getText();
-			String itemDesc = nameField.getText();
+			String itemDesc = descField.getText();
 			Double itemPrice = Double.parseDouble(priceField.getText());
 			int itemQuantity = Integer.parseInt(quantityField.getText());
 
@@ -238,7 +238,7 @@ public class StockTab {
 		try {
 			Long itemId = Long.parseLong(idField.getText());
 			String itemName = nameField.getText();
-			String itemDesc = nameField.getText();
+			String itemDesc = descField.getText();
 			Double itemPrice = Double.parseDouble(priceField.getText());
 			int itemQuantity = Integer.parseInt(quantityField.getText());
 
