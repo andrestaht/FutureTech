@@ -64,6 +64,7 @@ public class AcceptedOrder implements DisplayableItem {
 		for (final SoldItem item : soldItems) {
 			purchaseSum += item.getSum();
 		}
+		purchaseSum = Math.round(purchaseSum*100)/100.0;
 		return purchaseSum.toString();
 	}
 }
