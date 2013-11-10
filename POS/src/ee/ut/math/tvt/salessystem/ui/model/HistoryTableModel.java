@@ -10,9 +10,7 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(HistoryTableModel.class);
-
-	private final List<AcceptedOrder> orders = new ArrayList<>();
-
+	
 	public HistoryTableModel() {
 		super(new String[] { "Id", "Date", "Time", "Total Price"});
 	}
@@ -55,13 +53,12 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 	 * @param order
 	 */
 	public void addOrder(final AcceptedOrder order) {
-		orders.add(order);
 		rows.add(order);
 		log.debug("Added new sale " + order.getId() + " with total sum of " + order.getTotalSum());
 		fireTableDataChanged();
 	}
 
 	public AcceptedOrder getOrder(int rowNr) {
-		return orders.get(rowNr);
+		return rows.get(rowNr);
 	}
 }

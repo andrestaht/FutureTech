@@ -2,9 +2,11 @@ package ee.ut.math.tvt.salessystem.domain.controller.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
 import ee.ut.math.tvt.salessystem.domain.data.DisplayableItem;
@@ -27,29 +29,27 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 	@Override
 	public List<AcceptedOrder> loadHistory() {
-		// TODO
-		return new ArrayList<AcceptedOrder>();
+		List<AcceptedOrder> orders = session.createQuery("from AcceptedOrder").list();
+
+		for (AcceptedOrder order : orders) {
+			order.setSoldItems(session.createQuery("from SoldItem where acceptedorder_id = " + order.getId()).list());
+		}
+		return orders;
 	}
 
 	@Override
 	public void startNewPurchase() throws VerificationFailedException {
-		// TODO don't know what this should do
-	}
-
-	@Override
-	public void addNewSoldItem(SoldItem good) {
 		// TODO
 	}
 
 	@Override
 	public void cancelCurrentPurchase() throws VerificationFailedException {
-		// TODO should delete all the created sold items that aren't connected to any accepted order
+		// TODO
 	}
 
 	@Override
 	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException {
-		// TODO sold items must have accepted order, before saving them into to the DB
-		//saveEntities(goods); TODO should update the entities
+		saveEntities(goods);
 	}
 
 	@Override
@@ -72,8 +72,10 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 
 	@Override
-	public void addNewOrder(AcceptedOrder order) {
-		// TODO
+	public void addNewOrder(AcceptedOrder order) throws VerificationFailedException {
+		List<AcceptedOrder> orders = new ArrayList<AcceptedOrder>();
+		orders.add(order);
+		saveEntities(orders);
 	}
 
 	@Override

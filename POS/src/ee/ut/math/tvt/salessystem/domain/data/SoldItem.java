@@ -12,6 +12,8 @@ import javax.persistence.Table;
 @Table(name = "SOLDITEM")
 public class SoldItem implements Cloneable, DisplayableItem {
 
+	private static long ID = 1;
+
 	@Id
 	@Column(name = "id")
 	private Long id;
@@ -35,10 +37,15 @@ public class SoldItem implements Cloneable, DisplayableItem {
 
 	public SoldItem(StockItem stockItem, int quantity) {
 		this.stockItem = stockItem;
-		this.id = stockItem.getId();
+		this.id = ID;
 		this.name = stockItem.getName();
 		this.price = stockItem.getPrice();
 		this.quantity = quantity;
+		ID += 1;
+	}
+
+	public SoldItem() {
+		ID += 1;
 	}
 
 	@Override
@@ -80,6 +87,10 @@ public class SoldItem implements Cloneable, DisplayableItem {
 
 	public StockItem getStockItem() {
 		return stockItem;
+	}
+
+	public Long getStockItemId() {
+		return stockItem.getId();
 	}
 
 	public void setStockItem(StockItem stockItem) {

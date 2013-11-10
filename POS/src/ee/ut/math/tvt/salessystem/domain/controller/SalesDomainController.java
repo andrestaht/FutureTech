@@ -18,8 +18,6 @@ public interface SalesDomainController {
 
 	public void startNewPurchase() throws VerificationFailedException;
 
-	public void addNewSoldItem(SoldItem good);
-
 	public void cancelCurrentPurchase() throws VerificationFailedException;
 
 	public void submitCurrentPurchase(List<SoldItem> goods) throws VerificationFailedException;
@@ -30,7 +28,8 @@ public interface SalesDomainController {
 
 	public void modifyStockItems(List<StockItem> goods) throws VerificationFailedException;
 
-	public void addNewOrder(AcceptedOrder order);
+	public void addNewOrder(AcceptedOrder order) throws VerificationFailedException;
 
 	public void endSession();
+
 }

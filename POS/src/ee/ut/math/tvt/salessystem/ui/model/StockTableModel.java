@@ -73,11 +73,11 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		List<StockItem> modifiedItems = new ArrayList<StockItem>();
 
 		for(SoldItem soldItem : soldItems) {
-			StockItem item = getItemById(soldItem.getId());
+			StockItem item = getItemById(soldItem.getStockItemId());
 			item.setQuantity(item.getQuantity() - soldItem.getQuantity());
 			modifiedItems.add(item);
 
-			log.debug("Decreased quatity of product " + item.getName() + " by " + soldItem.getQuantity());
+			log.debug("Decreased quantity of product " + item.getName() + " by " + soldItem.getQuantity());
 			fireTableDataChanged();
 		}
 		return modifiedItems;

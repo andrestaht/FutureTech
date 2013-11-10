@@ -20,7 +20,7 @@ public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 	protected Object getColumnValue(SoldItem item, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return item.getId();
+			return item.getStockItemId();
 		case 1:
 			return item.getName();
 		case 2:
@@ -52,7 +52,7 @@ public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 		}
 		buffer.append("\n");
 		for (final SoldItem soldItem : rows) {
-			buffer.append(soldItem.getId() + "\t");
+			buffer.append(soldItem.getStockItemId() + "\t");
 			buffer.append(soldItem.getName() + "\t");
 			buffer.append(soldItem.getPrice() + "\t");
 			buffer.append(soldItem.getQuantity() + "\t");

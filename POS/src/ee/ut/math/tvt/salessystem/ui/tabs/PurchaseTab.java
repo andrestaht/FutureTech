@@ -12,16 +12,21 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
+
 import org.apache.log4j.Logger;
+
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.AcceptedOrder;
+import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
@@ -276,8 +281,6 @@ public class PurchaseTab {
 	}
 
 	protected void savePurchase() throws VerificationFailedException {
-		domainController.submitCurrentPurchase(model.getCurrentPurchaseTableModel().getTableRows());
-
 		AcceptedOrder order = new AcceptedOrder(
 			model.getCurrentPurchaseTableModel().getTableRows(),
 			((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()),
@@ -288,6 +291,12 @@ public class PurchaseTab {
 
 		List<StockItem> goods = model.getWarehouseTableModel().decreaseItemsQuantity(order.getSoldItems());
 		domainController.modifyStockItems(goods);
+		List<SoldItem> soldItems = order.getSoldItems();
+
+		for (SoldItem item : soldItems) {
+			item.setAcceptedOrder(order);
+		}
+		domainController.submitCurrentPurchase(soldItems);
 	}
 
 	/** Event handler for the <code>return to purchase</code> event. */
