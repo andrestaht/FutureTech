@@ -204,10 +204,8 @@ public class PurchaseItemPanel extends JPanel {
 						SoldItem newItem = new SoldItem(stockItem, quantity);
 
 						model.getCurrentPurchaseTableModel().addItem(newItem);
-						domainController.addNewSoldItem(newItem);
 					} else {
 						model.getCurrentPurchaseTableModel().updateItem(existingItem, quantity);
-						domainController.modifySoldItem(existingItem);
 					}
 				}
 			}

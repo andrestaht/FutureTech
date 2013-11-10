@@ -32,23 +32,12 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 
 	@Override
-	public List<SoldItem> loadSoldItems() {
-		// TODO return only these rows where accepted order id is null
-		return new ArrayList<SoldItem>();
-	}
-
-	@Override
 	public void startNewPurchase() throws VerificationFailedException {
 		// TODO don't know what this should do
 	}
 
 	@Override
 	public void addNewSoldItem(SoldItem good) {
-		// TODO
-	}
-
-	@Override
-	public void modifySoldItem(SoldItem good) {
 		// TODO
 	}
 
