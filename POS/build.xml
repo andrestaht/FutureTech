@@ -6,6 +6,8 @@
 	<property file="build.properties" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
+	<property name="build.test.dir" value="${build.dir}/test"/>
+
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="dist.dir" value="${build.classes.dir}/jar" />
 	<property name="conf.dir" value="${basedir}/conf" />
@@ -51,11 +53,11 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
-	 	<mapper>
-	    	<chainedmapper>
-	    		<flattenmapper/>
-	    		<globmapper from="*.jar" to="lib/*.jar"/>
-	    	</chainedmapper>
+		<mapper>
+			<chainedmapper>
+				<flattenmapper/>
+				<globmapper from="*.jar" to="lib/*.jar"/>
+			</chainedmapper>
 		</mapper>
 	</pathconvert>
 		
@@ -63,11 +65,11 @@
 		<fileset dir="${lib.hibernate.dir}">
 			<include name="*.jar" />
 		</fileset>
-	 	<mapper>
-	    	<chainedmapper>
-	    		<flattenmapper/>
-	    		<globmapper from="*.jar" to="lib/hibernate/*.jar"/>
-	    	</chainedmapper>
+		<mapper>
+			<chainedmapper>
+				<flattenmapper />
+				<globmapper from="*.jar" to="lib/hibernate/*.jar" />
+			</chainedmapper>
 		</mapper>
 	</pathconvert>
 	
@@ -83,6 +85,15 @@
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
 			target="1.7" source="1.7" includeantruntime="false">
 			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="build-tests" depends="build" description="Build the system">
+		<javac srcdir="${test.dir}" destdir="${build.test.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
+			target="1.7" source="1.7" classpathref="libs">
+			<classpath>
+				<pathelement path="${build.classes.dir}" />
+			</classpath>
 		</javac>
 	</target>
 
@@ -131,6 +142,16 @@
 			fork="yes">
 			<arg value="console" />
 		</java>
+	</target>
+
+	<target name="test" depends="build-tests" description="Run the template application">
+		<junit>
+			<classpath refid="test-classpath" />
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${build.test.dir}" includes="**/*.class" />
+			</batchtest>
+		</junit>
 	</target>
 
 	<!-- Build internal documentation -->
