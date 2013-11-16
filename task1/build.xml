@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="FT Salessystem" default="build">
+	<property file="build.properties" />
 
 	<!-- Definitions of variables used during the rest of this script -->
 
-	<property file="build.properties" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
-	<property name="build.test.dir" value="${build.dir}/test"/>
+	<property name="build.test.dir" value="${build.dir}/test" />
 
 	<property name="src.dir" value="${basedir}/src" />
+	<property name="test.dir" value="${basedir}/test" />
 	<property name="dist.dir" value="${build.classes.dir}/jar" />
 	<property name="conf.dir" value="${basedir}/conf" />
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="lib.hibernate.dir" value="${lib.dir}/hibernate" />
-	<property name="doc.dir" value="${build.dir}/doc" />
 	<property name="data.dir" value="${basedir}/data" />
-	<property name="test.reports.dir" value="${build.dir}/reports/" />
 	<property name="version.properties" value="${conf.dir}/version.properties" />
-
-	<!-- Database variables -->
 
 	<property name="db.file" value="${data.dir}/POSdb" />
 	<property name="db.alias" value="POS" />
@@ -35,9 +32,8 @@
 		</fileset>
 	</path>
 
-	<path id="test.classpath">
+	<path id="run.classpath">
 		<pathelement location="${build.classes.dir}" />
-		<!-- configuration -->
 		<pathelement location="${conf.dir}" />
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -46,9 +42,21 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-	
+
+	<path id="test.classpath">
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${build.test.dir}/" />
+		<pathelement location="${conf.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.hibernate.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
 	<!-- Classpaths of .jar files in folders lib and lib/hibernate that are needed for manifest -->
-	
+
 	<pathconvert property="manifest.classpath.lib" pathsep=" ">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -60,7 +68,7 @@
 			</chainedmapper>
 		</mapper>
 	</pathconvert>
-		
+
 	<pathconvert property="manifest.classpath.lib.hibernate" pathsep=" ">
 		<fileset dir="${lib.hibernate.dir}">
 			<include name="*.jar" />
@@ -72,16 +80,20 @@
 			</chainedmapper>
 		</mapper>
 	</pathconvert>
-	
+
 	<!-- Definitions of runnable ant targets -->
 
 	<target name="clean" description="Clean up build system results">
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="build" depends="clean" description="Build the system">
+	<target name="init" depends="clean" description="Initialize">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${build.test.dir}" />
+	</target>
+
+	<target name="build" depends="init" description="Build the system">
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
 			target="1.7" source="1.7" includeantruntime="false">
 			<classpath refid="compile.classpath" />
@@ -90,7 +102,8 @@
 
 	<target name="build-tests" depends="build" description="Build the system">
 		<javac srcdir="${test.dir}" destdir="${build.test.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
-			target="1.7" source="1.7" classpathref="libs">
+			target="1.7" source="1.7" includeantruntime="false">
+			<classpath refid="compile.classpath" />
 			<classpath>
 				<pathelement path="${build.classes.dir}" />
 			</classpath>
@@ -129,8 +142,7 @@
 	</target>
 
 	<target name="run" depends="build" description="Run the template application">
-		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
-			fork="yes">
+		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="run.classpath" fork="yes">
 			<jvmarg value="-Xdebug" />
 			<jvmarg
 				value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
@@ -138,29 +150,19 @@
 	</target>
 
 	<target name="runc" depends="build" description="Run the application (console)">
-		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="test.classpath"
-			fork="yes">
+		<java classname="ee.ut.math.tvt.FutureTech.Intro" classpathref="run.classpath" fork="yes">
 			<arg value="console" />
 		</java>
 	</target>
 
 	<target name="test" depends="build-tests" description="Run the template application">
 		<junit>
-			<classpath refid="test-classpath" />
+			<classpath refid="test.classpath" />
 			<formatter type="brief" usefile="false" />
 			<batchtest>
 				<fileset dir="${build.test.dir}" includes="**/*.class" />
 			</batchtest>
 		</junit>
-	</target>
-
-	<!-- Build internal documentation -->
-
-	<target name="javadoc" description="Build internal documentation">
-		<mkdir dir="${doc.dir}" />
-		<javadoc destdir="${doc.dir}" classpathref="compile.classpath">
-			<fileset dir="${src.dir}" includes="**/*.java" />
-		</javadoc>
 	</target>
 
 	<!-- Git targets -->
@@ -239,13 +241,13 @@
 
 	<target name="dbmanager" description="Start the HSQLDB manager">
 		<java classname="org.hsqldb.util.DatabaseManagerSwing"
-			classpathref="test.classpath" fork="yes">
+			classpathref="run.classpath" fork="yes">
 			<arg line="--user sa --url ${db.url}" />
 		</java>
 	</target>
 
 	<target name="startdb" description="Start the HSQLDB with the default params">
-		<java classname="org.hsqldb.Server" classpathref="test.classpath" fork="yes">
+		<java classname="org.hsqldb.Server" classpathref="run.classpath" fork="yes">
 			<arg line="-database.0 '${db.file}' -dbname.0 '${db.alias}'" />
 		</java>
 	</target>

@@ -33,7 +33,7 @@ public class AcceptedOrder implements DisplayableItem {
 		this.id = ID;
 		ID += 1;
 	}
-	
+
 	public AcceptedOrder() {
 		ID += 1;
 	}
@@ -46,7 +46,7 @@ public class AcceptedOrder implements DisplayableItem {
 	public List<SoldItem> getSoldItems() {
 		return soldItems;
 	}
-	
+
 	public void setSoldItems(List<SoldItem> soldItems) {
 		this.soldItems = soldItems;
 	}
@@ -59,12 +59,19 @@ public class AcceptedOrder implements DisplayableItem {
 		return time;
 	}
 
-	public String getTotalSum() {
+	public Double getTotalSum() {
 		Double purchaseSum = 0.0;
 		for (final SoldItem item : soldItems) {
 			purchaseSum += item.getSum();
 		}
-		purchaseSum = Math.round(purchaseSum*100)/100.0;
-		return purchaseSum.toString();
+		return Math.round(purchaseSum * 100) / 100.0;
+	}
+
+	public String getTotalSumInString() {
+		return getTotalSum().toString();
+	}
+
+	public void addSoldItem(SoldItem item) {
+		soldItems.add(item);
 	}
 }
