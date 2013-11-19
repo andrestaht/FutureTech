@@ -36,12 +36,17 @@ public class SoldItem implements Cloneable, DisplayableItem {
 	private AcceptedOrder acceptedOrder;
 
 	public SoldItem(StockItem stockItem, int quantity) {
-		this.stockItem = stockItem;
-		this.id = ID;
-		this.name = stockItem.getName();
-		this.price = stockItem.getPrice();
-		this.quantity = quantity;
-		ID += 1;
+		if (stockItem.getQuantity() >= quantity) {
+			this.stockItem = stockItem;
+			this.id = ID;
+			this.name = stockItem.getName();
+			this.price = stockItem.getPrice();
+			this.quantity = quantity;
+			ID += 1;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	public SoldItem() {
