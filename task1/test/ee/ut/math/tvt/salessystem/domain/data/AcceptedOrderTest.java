@@ -18,7 +18,7 @@ public class AcceptedOrderTest {
 	public void testAddSoldItem() {
 		SoldItem soldItem = new SoldItem(new StockItem("Praad", "Mahlane", 6.9, 5), 3);
 		order.addSoldItem(soldItem);
-		assertEquals(order.getSoldItems().get(order.getSoldItems().size() - 1), soldItem);
+		assertEquals(order.getSoldItems().contains(soldItem), true);
 	}
 
 	@Test
