@@ -46,16 +46,12 @@ public class PurchaseItemPanel extends JPanel {
 
 	private final SalesSystemModel model;
 
-	private final SalesDomainController domainController;
-
 	/**
 	 * Constructs new purchase item panel.
 	 * 
-	 * @param model
-	 *          composite model of the warehouse and the shopping cart.
+	 * @param model composite model of the warehouse and the shopping cart.
 	 */
 	public PurchaseItemPanel(SalesDomainController controller, SalesSystemModel model) {
-		this.domainController = controller;
 		this.model = model;
 		setLayout(new GridBagLayout());
 		add(drawDialogPane(), getDialogPaneConstraints());

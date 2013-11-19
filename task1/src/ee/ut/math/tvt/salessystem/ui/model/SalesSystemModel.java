@@ -3,7 +3,6 @@ package ee.ut.math.tvt.salessystem.ui.model;
 import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
-import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 
 /**
  * Main model. Holds all the other models.
@@ -22,15 +21,12 @@ public class SalesSystemModel {
 	private final HistoryTableModel historyTableModel;
 	private final DetailedHistoryTableModel detailedHistoryTable;
 
-	private final SalesDomainController domainController;
-
 	/**
 	 * Construct application model.
 	 * 
 	 * @param domainController Sales domain controller.
 	 */
 	public SalesSystemModel(SalesDomainController domainController) {
-		this.domainController = domainController;
 		warehouseTableModel = new StockTableModel();
 		currentPurchaseTableModel = new PurchaseInfoTableModel();
 		historyTableModel = new HistoryTableModel();
