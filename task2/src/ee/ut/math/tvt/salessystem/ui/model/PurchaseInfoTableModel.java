@@ -16,6 +16,8 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	private static final Logger log = Logger.getLogger(PurchaseInfoTableModel.class);
 
 	private SalesSystemModel model;
+	
+	private Sale sale;
 
     public PurchaseInfoTableModel() {
         super(new String[] { "Id", "Name", "Price", "Quantity", "Sum"});
@@ -24,6 +26,10 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	public PurchaseInfoTableModel(SalesSystemModel model) {
 	    this();
 	    this.model = model;
+	}
+	
+	public void setSale(Sale sale) {
+		this.sale = sale;
 	}
 
 	@Override
@@ -65,7 +71,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 
 
 	public SoldItem getForStockItem(long stockItemId) {
-	    for (SoldItem item : rows) {
+	    for (SoldItem item : sale.getSoldItems()) {
 	        if (item.getStockItem().getId().equals(stockItemId)) {
 	            return item;
 	        }
@@ -93,7 +99,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 
         } else {
             validateQuantityInStock(soldItem.getStockItem(), soldItem.getQuantity());
-            rows.add(soldItem);
+            this.sale.addSoldItem(soldItem);
             log.debug("Added " + soldItem.getName()
                     + " quantity of " + soldItem.getQuantity());
         }

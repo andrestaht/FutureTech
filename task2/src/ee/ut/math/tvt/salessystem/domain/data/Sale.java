@@ -36,10 +36,10 @@ public class Sale implements DisplayableItem {
     /** Empty constructors are used by hibernate */
     public Sale() {
     }
-
-    public Sale(List<SoldItem> goods) {
-        this.soldItems = new HashSet<SoldItem>(goods);
-        this.sellingTime = new Date();
+    
+    public Sale(Client client) {
+        this.client = client;
+        this.soldItems = new HashSet<SoldItem>();
     }
 
     public Client getClient() {
