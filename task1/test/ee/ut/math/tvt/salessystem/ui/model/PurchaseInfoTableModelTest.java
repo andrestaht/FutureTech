@@ -6,7 +6,6 @@ import org.junit.Test;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 
-
 public class PurchaseInfoTableModelTest {
 
 	private PurchaseInfoTableModel model;

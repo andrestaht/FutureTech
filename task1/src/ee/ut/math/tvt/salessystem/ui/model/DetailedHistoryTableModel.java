@@ -33,17 +33,6 @@ public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 		throw new IllegalArgumentException("Column index out of range");
 	}
 
-	/**
-	 * Add items to the detailed history table.
-	 * 
-	 * @param item
-	 */
-	public void addItems(List<SoldItem> soldItems) {
-		rows.clear();
-		rows.addAll(soldItems);
-		log.debug("Added sold items to the order details table ");
-	}
-
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
@@ -59,5 +48,11 @@ public class DetailedHistoryTableModel extends SalesSystemTableModel<SoldItem>{
 			buffer.append("\n");
 		}
 		return buffer.toString();
+	}
+
+	public void addItems(List<SoldItem> soldItems) {
+		rows.clear();
+		rows.addAll(soldItems);
+		log.debug("Added sold items to the order details table");
 	}
 }

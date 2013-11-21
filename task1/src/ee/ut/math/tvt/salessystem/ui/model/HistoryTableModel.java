@@ -45,11 +45,6 @@ public class HistoryTableModel extends SalesSystemTableModel<AcceptedOrder>{
 		return buffer.toString();
 	}
 
-	/**
-	 * Add new accepted order to the history table.
-	 * 
-	 * @param order
-	 */
 	public void addOrder(final AcceptedOrder order) {
 		rows.add(order);
 		log.debug("Added new sale " + order.getId() + " with total sum of " + order.getTotalSumInString());
