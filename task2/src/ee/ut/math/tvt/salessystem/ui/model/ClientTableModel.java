@@ -5,7 +5,8 @@ import ee.ut.math.tvt.salessystem.domain.data.Client;
 /**
  * Client model.
  */
-public class ClientTableModel extends SalesSystemTableModel<Client> {
+public class ClientTableModel extends SaleSystemWithRowsTableModel<Client> {
+
 	private static final long serialVersionUID = 1L;
 
 	public ClientTableModel() {
@@ -29,8 +30,9 @@ public class ClientTableModel extends SalesSystemTableModel<Client> {
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 
-		for (int i = 0; i < headers.length; i++)
+		for (int i = 0; i < headers.length; i++) {
 			buffer.append(headers[i] + "\t");
+		}
 		buffer.append("\n");
 
 		for (final Client client : rows) {

@@ -2,7 +2,6 @@ package ee.ut.math.tvt.salessystem.domain.data;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,70 +20,72 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "SALE")
 public class Sale implements DisplayableItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @OneToMany(targetEntity = SoldItem.class, mappedBy = "sale", cascade = CascadeType.ALL)
-    private Set<SoldItem> soldItems;
-    private Date sellingTime;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CLIENT_ID")
-    private Client client;
+	@OneToMany(targetEntity = SoldItem.class, mappedBy = "sale", cascade = CascadeType.ALL)
+	private Set<SoldItem> soldItems;
+	private Date sellingTime;
 
-    /** Empty constructors are used by hibernate */
-    public Sale() {
-    }
-    
-    public Sale(Client client) {
-        this.client = client;
-        this.soldItems = new HashSet<SoldItem>();
-    }
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CLIENT_ID")
+	private Client client;
 
-    public Client getClient() {
-        return client;
-    }
+	/** Empty constructors are used by hibernate */
+	public Sale() {
+		soldItems = new HashSet<SoldItem>();
+	}
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
+	public Sale(Client client) {
+		this.client = client;
+		this.soldItems = new HashSet<SoldItem>();
+	}
 
-    public Date getSellingTime() {
-        return sellingTime;
-    }
+	public Client getClient() {
+		return client;
+	}
 
-    public void setSellingTime(Date sellingTime) {
-        this.sellingTime = sellingTime;
-    }
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
-    public Set<SoldItem> getSoldItems() {
-        return soldItems;
-    }
+	public Date getSellingTime() {
+		return sellingTime;
+	}
 
-    public void setSoldItems(Set<SoldItem> soldItems) {
-        this.soldItems = soldItems;
-    }
+	public void setSellingTime(Date sellingTime) {
+		this.sellingTime = sellingTime;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Set<SoldItem> getSoldItems() {
+		return soldItems;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setSoldItems(Set<SoldItem> soldItems) {
+		this.soldItems = soldItems;
+	}
 
-    public void addSoldItem(SoldItem item) {
-        item.setSale(this);
-        soldItems.add(item);
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public double getSum() {
-        double sum = 0.0;
-        for (SoldItem item : soldItems) {
-            sum = sum + item.getPrice() * ((double) item.getQuantity());
-        }
-        return sum;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
+	public void addSoldItem(SoldItem item) {
+		item.setSale(this);
+		soldItems.add(item);
+	}
+
+	public double getSum() {
+		double sum = 0.0;
+		for (SoldItem item : soldItems) {
+			sum = sum + item.getPrice() * ((double) item.getQuantity());
+		}
+		return sum;
+	}
 }
