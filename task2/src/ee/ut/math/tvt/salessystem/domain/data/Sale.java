@@ -83,8 +83,9 @@ public class Sale implements DisplayableItem {
 
 	public double getSum() {
 		double sum = 0.0;
+
 		for (SoldItem item : soldItems) {
-			sum = sum + item.getPrice() * ((double) item.getQuantity());
+			sum += item.getPrice() * ((double) item.getQuantity());
 		}
 		return sum;
 	}

@@ -10,9 +10,10 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * Utility class that makes sure we has a single open hibernate session.
  */
 public class HibernateUtil {
+
 	private static final Logger log = Logger.getLogger(HibernateUtil.class);
 
-	public static final SessionFactory sessionFactory;
+	private static final SessionFactory sessionFactory;
 
 	static {
 		try {
@@ -28,6 +29,7 @@ public class HibernateUtil {
 	private static Session session;
 
 	public static Session currentSession() throws HibernateException {
+
 		// Open a new Session, if this thread has none yet
 		if (session == null) {
 			session = sessionFactory.openSession();
@@ -40,5 +42,4 @@ public class HibernateUtil {
 			session.close();
 		session = null;
 	}
-
 }

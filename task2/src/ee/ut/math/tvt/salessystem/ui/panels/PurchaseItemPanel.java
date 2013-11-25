@@ -4,6 +4,7 @@ import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.SalesSystemException;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.NoSuchElementException;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -23,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,9 +38,13 @@ public class PurchaseItemPanel extends JPanel {
 	private static final Logger logger = Logger.getLogger(PurchaseItemPanel.class);
 
 	// Text field on the dialogPane
+	@SuppressWarnings("rawtypes")
 	private JComboBox stockItemSelector;
+
 	private JTextField barCodeField;
+
 	private JTextField quantityField;
+
 	private JTextField priceField;
 
 	private JButton addItemButton;
@@ -49,7 +56,7 @@ public class PurchaseItemPanel extends JPanel {
 	 * Constructs new purchase item panel.
 	 *
 	 * @param model
-	 *            composite model of the warehouse and the shopping cart.
+	 * composite model of the warehouse and the shopping cart.
 	 */
 	public PurchaseItemPanel(SalesSystemModel model) {
 		this.model = model;
@@ -81,6 +88,7 @@ public class PurchaseItemPanel extends JPanel {
 	}
 
 	// purchase dialog
+	@SuppressWarnings("rawtypes")
 	private JComponent drawDialogPane() {
 
 		// Create the panel
@@ -139,10 +147,8 @@ public class PurchaseItemPanel extends JPanel {
 		return panel;
 	}
 
-
-
 	// Fill dialog with data from the "database".
-	public void fillDialogFields() {
+	private void fillDialogFields() {
 		//StockItem stockItem = getStockItemByBarcode();
 		StockItem stockItem = (StockItem) stockItemSelector.getSelectedItem();
 
@@ -173,7 +179,7 @@ public class PurchaseItemPanel extends JPanel {
 	/**
 	 * Add new item to the cart.
 	 */
-	public void addItemEventHandler() {
+	private void addItemEventHandler() {
 		// add chosen item to the shopping cart.
 		StockItem stockItem = getStockItemByBarcode();
 		if (stockItem != null) {
@@ -186,8 +192,7 @@ public class PurchaseItemPanel extends JPanel {
 
 			// If there is not enough stock left in the warehouse to add this quantity..
 			try {
-				model.getCurrentPurchaseTableModel()
-				.addItem(new SoldItem(stockItem, quantity));
+				model.getCurrentPurchaseTableModel().addItem(new SoldItem(stockItem, quantity));
 			} catch (SalesSystemException e) {
 				showNotEnoughInStockWarning();
 			}
@@ -195,11 +200,12 @@ public class PurchaseItemPanel extends JPanel {
 	}
 
 	private void showNotEnoughInStockWarning() {
-		JOptionPane.showMessageDialog(this,
+		JOptionPane.showMessageDialog(
+			this,
 			"Not enough stock, decrease amount",
 			"Attention",
 			JOptionPane.WARNING_MESSAGE
-			);
+		);
 		logger.debug("  -- there was not enough cargo in warehouse to add item");
 	}
 
@@ -220,15 +226,16 @@ public class PurchaseItemPanel extends JPanel {
 	/**
 	 * Reset dialog fields.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void reset() {
 		// Initialize the textfields
 		((DefaultComboBoxModel)stockItemSelector.getModel()).removeAllElements();
-		for(StockItem stockItem : model.getWarehouseTableModel().getTableRows()) {
+
+		for (StockItem stockItem : model.getWarehouseTableModel().getTableRows()) {
 			((DefaultComboBoxModel)stockItemSelector.getModel()).addElement(stockItem);
 		}
 		barCodeField.setText("");
 		quantityField.setText("1");
-		//nameField.setText("");
 		priceField.setText("");
 	}
 
@@ -280,5 +287,4 @@ public class PurchaseItemPanel extends JPanel {
 
 		return gc;
 	}
-
 }

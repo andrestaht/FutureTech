@@ -22,175 +22,182 @@ import org.apache.log4j.Logger;
 
 public class StockTab {
 
-    private static final Logger log = Logger.getLogger(StockTab.class);
-    private final SalesDomainController controller;
+	private static final Logger log = Logger.getLogger(StockTab.class);
 
-    private SalesSystemModel model;
+	private final SalesDomainController controller;
 
-    private JButton addItem;
+	private SalesSystemModel model;
 
-    public StockTab(SalesSystemModel model, SalesDomainController controller) {
-        this.model = model;
-        this.controller = controller;
-    }
+	private JButton addItem;
 
-    // warehouse stock tab - consists of a menu and a table
-    public Component draw() {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	public StockTab(SalesSystemModel model, SalesDomainController controller) {
+		this.model = model;
+		this.controller = controller;
+	}
 
-        GridBagLayout gb = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        panel.setLayout(gb);
+	// warehouse stock tab - consists of a menu and a table
+	public Component draw() {
+		JPanel panel = new JPanel();
 
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.anchor = GridBagConstraints.NORTH;
-        gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.weightx = 1.0d;
-        gc.weighty = 0d;
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        panel.add(drawStockMenuPane(), gc);
+		GridBagLayout gb = new GridBagLayout();
+		GridBagConstraints gc = new GridBagConstraints();
 
-        gc.weighty = 1.0;
-        gc.fill = GridBagConstraints.BOTH;
-        panel.add(drawStockMainPane(), gc);
-        return panel;
-    }
+		panel.setLayout(gb);
 
-    // warehouse menu
-    private Component drawStockMenuPane() {
-        JPanel panel = new JPanel();
+		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.anchor = GridBagConstraints.NORTH;
+		gc.gridwidth = GridBagConstraints.REMAINDER;
+		gc.weightx = 1.0d;
+		gc.weighty = 0d;
 
-        GridBagConstraints gc = new GridBagConstraints();
-        GridBagLayout gb = new GridBagLayout();
+		panel.add(drawStockMenuPane(), gc);
 
-        panel.setLayout(gb);
+		gc.weighty = 1.0;
+		gc.fill = GridBagConstraints.BOTH;
+		panel.add(drawStockMainPane(), gc);
+		return panel;
+	}
 
-        gc.anchor = GridBagConstraints.NORTHWEST;
-        gc.weightx = 0;
+	// warehouse menu
+	private Component drawStockMenuPane() {
+		JPanel panel = new JPanel();
 
-        addItem = new JButton("Add");
-        addItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                addStockItemEventHandler();
-            }
-        });
+		GridBagConstraints gc = new GridBagConstraints();
+		GridBagLayout gb = new GridBagLayout();
 
-        gc.gridwidth = GridBagConstraints.RELATIVE;
-        gc.weightx = 1.0;
-        panel.add(addItem, gc);
+		panel.setLayout(gb);
 
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel;
-    }
+		gc.anchor = GridBagConstraints.NORTHWEST;
+		gc.weightx = 0;
 
-    // table of the wareshouse stock
-    private Component drawStockMainPane() {
-        JPanel panel = new JPanel();
+		addItem = new JButton("Add");
 
-        JTable table = new JTable(model.getWarehouseTableModel());
+		addItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addStockItemEventHandler();
+			}
+		});
 
-        JTableHeader header = table.getTableHeader();
-        header.setReorderingAllowed(false);
+		gc.gridwidth = GridBagConstraints.RELATIVE;
+		gc.weightx = 1.0;
 
-        JScrollPane scrollPane = new JScrollPane(table);
+		panel.add(addItem, gc);
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        GridBagConstraints gc = new GridBagConstraints();
-        GridBagLayout gb = new GridBagLayout();
-        gc.fill = GridBagConstraints.BOTH;
-        gc.weightx = 1.0;
-        gc.weighty = 1.0;
+		return panel;
+	}
 
-        panel.setLayout(gb);
-        panel.add(scrollPane, gc);
+	// table of the wareshouse stock
+	private Component drawStockMainPane() {
+		JPanel panel = new JPanel();
 
-        panel.setBorder(BorderFactory.createTitledBorder("Warehouse status"));
-        return panel;
-    }
+		JTable table = new JTable(model.getWarehouseTableModel());
 
-    /**
-     * Add new item to the stock.
-     */
-    public void addStockItemEventHandler() {
-        JTextField itemName = new JTextField();
-        JTextField itemPrice = new JTextField();
-        JTextField itemQuantity = new JTextField();
+		JTableHeader header = table.getTableHeader();
+		header.setReorderingAllowed(false);
 
-        JOptionPane op = new JOptionPane(
-            new Object[] {"Name:", itemName, "Price:", itemPrice, "Quantity: ", itemQuantity},
-            JOptionPane.QUESTION_MESSAGE,
-            JOptionPane.OK_CANCEL_OPTION,
-            null,
-            null);
+		JScrollPane scrollPane = new JScrollPane(table);
 
-        JDialog dialog = op.createDialog(null, "Enter new item ...");
-        dialog.setDefaultCloseOperation(
-                JDialog.DO_NOTHING_ON_CLOSE);
-        dialog.setVisible(true);
+		GridBagConstraints gc = new GridBagConstraints();
+		GridBagLayout gb = new GridBagLayout();
 
-        int result = ((Integer)op.getValue()).intValue();
+		gc.fill = GridBagConstraints.BOTH;
+		gc.weightx = 1.0;
+		gc.weighty = 1.0;
 
-        if (result == JOptionPane.OK_OPTION) {
-            addItemOkPressed(itemName.getText(), itemPrice.getText(), itemQuantity.getText());
-        } else {
-            log.debug("Cancelled");
-        }
-    }
+		panel.setLayout(gb);
+		panel.add(scrollPane, gc);
+		panel.setBorder(BorderFactory.createTitledBorder("Warehouse status"));
 
-    /**
-     * Add stock item
-     */
-    private void addItemOkPressed(String itemName, String itemPrice, String itemQuantity) {
-        StringBuffer errorMessage = new StringBuffer();
-        double price = 0.0;
-        int quantity = 0;
-        boolean nameValid = false;
-        boolean priceValid = false;
-        boolean quantityValid = false;
+		return panel;
+	}
 
-        nameValid = itemName.length() > 0;
-        if (!nameValid) {
-            errorMessage.append("A non-empty name must be entered for the product!\n");
-        } else if (!model.getWarehouseTableModel().validateNameUniqueness(itemName)) {
-            errorMessage.append("Entered name already exists!\n");
-            nameValid = false;
-        }
+	/**
+	 * Add new item to the stock.
+	 */
+	private void addStockItemEventHandler() {
+		JTextField itemName = new JTextField();
+		JTextField itemPrice = new JTextField();
+		JTextField itemQuantity = new JTextField();
 
-        try {
-            price = Double.parseDouble(itemPrice);
-            priceValid = (price >= 0.0);
-        } catch (NumberFormatException ex) {}
+		JOptionPane op = new JOptionPane(
+			new Object[] {"Name:", itemName, "Price:", itemPrice, "Quantity: ", itemQuantity},
+			JOptionPane.QUESTION_MESSAGE,
+			JOptionPane.OK_CANCEL_OPTION,
+			null,
+			null
+		);
 
-        if (!priceValid) {
-            errorMessage.append("Entered price is not valid!\n");
-        }
+		JDialog dialog = op.createDialog(null, "Enter new item ...");
 
-        try {
-            quantity = Integer.parseInt(itemQuantity);
-            quantityValid = (quantity >= 0);
-        } catch (NumberFormatException ex) {}
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.setVisible(true);
 
-        if (!quantityValid) {
-            errorMessage.append("Entered quantity is not valid!");
-        }
+		int result = ((Integer)op.getValue()).intValue();
 
-        if (nameValid && priceValid && quantityValid) {
-            StockItem newItem = new StockItem(itemName, "", price, quantity);
-            controller.createStockItem(newItem);
+		if (result == JOptionPane.OK_OPTION) {
+			addItemOkPressed(itemName.getText(), itemPrice.getText(), itemQuantity.getText());
+		} else {
+			log.debug("Cancelled");
+		}
+	}
 
-        // Show the error messages
-        } else {
-            JOptionPane.showMessageDialog(
-                    null,
-                    errorMessage.toString(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
-    
-    public void refresh() {
-    	model.getWarehouseTableModel().populateWithData(controller.getAllStockItems());
-    }
+	/**
+	 * Add stock item
+	 */
+	private void addItemOkPressed(String itemName, String itemPrice, String itemQuantity) {
+		StringBuffer errorMessage = new StringBuffer();
 
+		double price = 0.0;
+		int quantity = 0;
+		boolean nameValid = false;
+		boolean priceValid = false;
+		boolean quantityValid = false;
+
+		nameValid = itemName.length() > 0;
+		if (!nameValid) {
+			errorMessage.append("A non-empty name must be entered for the product!\n");
+		} else if (!model.getWarehouseTableModel().validateNameUniqueness(itemName)) {
+			errorMessage.append("Entered name already exists!\n");
+			nameValid = false;
+		}
+
+		try {
+			price = Double.parseDouble(itemPrice);
+			priceValid = (price >= 0.0);
+		} catch (NumberFormatException ex) {}
+
+		if (!priceValid) {
+			errorMessage.append("Entered price is not valid!\n");
+		}
+
+		try {
+			quantity = Integer.parseInt(itemQuantity);
+			quantityValid = (quantity >= 0);
+		} catch (NumberFormatException ex) {}
+
+		if (!quantityValid) {
+			errorMessage.append("Entered quantity is not valid!");
+		}
+
+		if (nameValid && priceValid && quantityValid) {
+			StockItem newItem = new StockItem(itemName, "", price, quantity);
+			controller.createStockItem(newItem);
+
+			// Show the error messages
+		} else {
+			JOptionPane.showMessageDialog(
+				null,
+				errorMessage.toString(),
+				"Error",
+				JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+
+	public void refresh() {
+		model.getWarehouseTableModel().populateWithData(controller.getAllStockItems());
+	}
 }

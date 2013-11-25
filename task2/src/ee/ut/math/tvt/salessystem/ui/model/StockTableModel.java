@@ -1,6 +1,5 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
-import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 
@@ -30,19 +29,6 @@ public class StockTableModel extends SaleSystemWithRowsTableModel<StockItem> {
 			return item.getQuantity();
 		}
 		throw new IllegalArgumentException("Column index out of range");
-	}
-
-	public void addItem(final StockItem stockItem) {
-		try {
-			StockItem item = getItemById(stockItem.getId());
-			item.setQuantity(item.getQuantity() + stockItem.getQuantity());
-			log.debug("Found existing item " + stockItem.getName() + " increased quantity by " + stockItem.getQuantity());
-		}
-		catch (NoSuchElementException e) {
-			rows.add(stockItem);
-			log.debug("Added " + stockItem.getName() + " quantity of " + stockItem.getQuantity());
-		}
-		fireTableDataChanged();
 	}
 
 	public boolean hasEnoughInStock(StockItem item, int quantity) {
@@ -83,5 +69,4 @@ public class StockTableModel extends SaleSystemWithRowsTableModel<StockItem> {
 		}
 		return buffer.toString();
 	}
-
 }

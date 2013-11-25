@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import ee.ut.math.tvt.salessystem.domain.data.DisplayableItem;
 
-public abstract class SaleSystemWithRowsTableModel<T extends DisplayableItem> extends SalesSystemTableModel<T> {
+abstract class SaleSystemWithRowsTableModel<T extends DisplayableItem> extends SalesSystemTableModel<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	protected List<T> rows;
 
-	public SaleSystemWithRowsTableModel(final String[] headers) {
+	SaleSystemWithRowsTableModel(final String[] headers) {
 		super(headers);
 		rows = new ArrayList<T>();
 	}
@@ -38,11 +38,6 @@ public abstract class SaleSystemWithRowsTableModel<T extends DisplayableItem> ex
 			}
 		}
 		throw new NoSuchElementException();
-	}
-
-	public void clear() {
-		rows = new ArrayList<T>();
-		fireTableDataChanged();
 	}
 
 	public void populateWithData(final List<T> data) {

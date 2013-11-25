@@ -26,7 +26,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 		sale = new Sale();
 	}
 
-	public PurchaseInfoTableModel(SalesSystemModel model) {
+	PurchaseInfoTableModel(SalesSystemModel model) {
 		this();
 		this.model = model;
 	}
@@ -87,7 +87,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 		return getColumnValue(getTableRows().get(rowIndex), columnIndex);
 	}
 
-	public SoldItem getForStockItem(long stockItemId) {
+	private SoldItem getForStockItem(long stockItemId) {
 		for (SoldItem item : sale.getSoldItems()) {
 			if (item.getStockItem().getId().equals(stockItemId)) {
 				return item;
@@ -100,7 +100,6 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	 * Add new StockItem to table.
 	 */
 	public void addItem(final SoldItem soldItem) throws SalesSystemException {
-
 		StockItem stockItem = soldItem.getStockItem();
 		long stockItemId = stockItem.getId();
 		SoldItem existingItem = getForStockItem(stockItemId);
@@ -110,16 +109,12 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 			validateQuantityInStock(stockItem, totalQuantity);
 			existingItem.setQuantity(totalQuantity);
 
-			log.debug("Found existing item " + soldItem.getName()
-				+ " increased quantity by " + soldItem.getQuantity());
-
+			log.debug("Found existing item " + soldItem.getName() + " increased quantity by " + soldItem.getQuantity());
 		} else {
 			validateQuantityInStock(soldItem.getStockItem(), soldItem.getQuantity());
 			this.sale.addSoldItem(soldItem);
-			log.debug("Added " + soldItem.getName()
-				+ " quantity of " + soldItem.getQuantity());
+			log.debug("Added " + soldItem.getName() + " quantity of " + soldItem.getQuantity());
 		}
-
 		fireTableDataChanged();
 	}
 
@@ -128,6 +123,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	 */
 	public double getTotalPrice() {
 		double price = 0.0;
+
 		for (SoldItem item : sale.getSoldItems()) {
 			price += item.getSum();
 		}

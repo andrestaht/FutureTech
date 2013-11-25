@@ -27,11 +27,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<StockItem> getAllStockItems() {
-		List<StockItem> result =
-			session
-			.createQuery("from StockItem")
-			.list();
-
+		List<StockItem> result = session.createQuery("from StockItem").list();
 		log.info(result.size() + " items loaded from disk");
 
 		return result;
@@ -50,9 +46,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Client> getAllClients() {
-		List<Client> clients =
-			session.createQuery("from Client").list();
-
+		List<Client> clients = session.createQuery("from Client").list();
 		log.info(clients.size() + " clients loaded from disk");
 
 		return clients;
@@ -62,7 +56,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	public Client getClient(long id) {
 		return (Client) session.get(Client.class, id);
 	}
-
 
 	private StockItem getStockItem(long id) {
 		return (StockItem) session.get(StockItem.class, id);
@@ -102,34 +95,25 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		log.info("Added new stockItem : " + stockItem);
 	}
 
-
 	@Override
 	public void cancelCurrentPurchase() {
-		// XXX - Cancel current purchase
+		// Cancel current purchase
 		log.info("Current purchase canceled");
 	}
 
 	@Override
 	public void startNewPurchase() {
-		// XXX - Start new purchase
+		// Start new purchase
 		log.info("New purchase started");
 	}
-
-
 
 	@Override
 	public void setModel(SalesSystemModel model) {
 		this.model = model;
 	}
 
-
-	public Sale getSale(Long id) {
-		return (Sale) session.get(Sale.class, id);
-	}
-
 	@Override
 	public void endSession() {
 		HibernateUtil.closeSession();
 	}
-
 }

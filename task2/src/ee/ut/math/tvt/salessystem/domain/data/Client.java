@@ -14,42 +14,43 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CLIENT")
 public class Client implements DisplayableItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "discount")
-    private Integer discountPercentage;
+	@Column(name = "first_name")
+	private String firstName;
 
-    public Integer getDiscountPercentage() {
-        return discountPercentage;
-    }
+	@Column(name = "discount")
+	private Integer discountPercentage;
 
-    public void setDiscountPercentage(Integer discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
+	public Integer getDiscountPercentage() {
+		return discountPercentage;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public void setDiscountPercentage(Integer discountPercentage) {
+		this.discountPercentage = discountPercentage;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    @Override
-    public String toString() {
-        return firstName;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return firstName;
+	}
 }

@@ -7,13 +7,13 @@ import ee.ut.math.tvt.salessystem.domain.data.DisplayableItem;
 /**
  * Generic table model implementation suitable for extending.
  */
-public abstract class SalesSystemTableModel<T extends DisplayableItem> extends AbstractTableModel {
+abstract class SalesSystemTableModel<T extends DisplayableItem> extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
 	protected final String[] headers;
 
-	public SalesSystemTableModel(final String[] headers) {
+	SalesSystemTableModel(final String[] headers) {
 		this.headers = headers;
 	}
 

@@ -35,14 +35,14 @@ public class PurchaseHistoryTableModel extends SaleSystemWithRowsTableModel<Sale
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
+
 		for (int i = 0; i < headers.length; i++) {
 			buffer.append(headers[i] + "\t");
 		}
 		buffer.append("\n");
+
 		for (final Sale sale : rows) {
 			buffer.append(sale.getId() + "\t");
-			// buffer.append(sale.getClient() != null ?
-			// sale.getClient().getFirstName() : "" + "\t");
 			buffer.append(sale.getSum() + "\t");
 			buffer.append("\n");
 		}

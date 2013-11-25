@@ -36,7 +36,6 @@ public class SalesSystemModel {
 		clientTableModel = new ClientTableModel();
 
 		// Load data from the database
-
 		List<StockItem> stockItems = domainController.getAllStockItems();
 		warehouseTableModel.populateWithData(stockItems);
 
@@ -63,8 +62,7 @@ public class SalesSystemModel {
 		return clientTableModel;
 	}
 
-	public void setPurchaseHistoryTableModel(
-		PurchaseHistoryTableModel purchaseHistoryTableModel) {
+	public void setPurchaseHistoryTableModel(PurchaseHistoryTableModel purchaseHistoryTableModel) {
 		this.purchaseHistoryTableModel = purchaseHistoryTableModel;
 	}
 
@@ -75,5 +73,4 @@ public class SalesSystemModel {
 	public void setSelectedClient(Client client) {
 		this.selectedClient = client;
 	}
-
 }

@@ -61,6 +61,7 @@ public class AcceptedOrder implements DisplayableItem {
 
 	public Double getTotalSum() {
 		Double purchaseSum = 0.0;
+
 		for (final SoldItem item : soldItems) {
 			purchaseSum += item.getSum();
 		}
