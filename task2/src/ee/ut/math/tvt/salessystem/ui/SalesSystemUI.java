@@ -33,18 +33,18 @@ public class SalesSystemUI extends JFrame {
 	private static final Logger log = Logger.getLogger(SalesSystemUI.class);
 
 	// Warehouse model
-	private SalesSystemModel model;
+	private final SalesSystemModel model;
 
 	// Instances of tab classes
-	private PurchaseTab purchaseTab;
+	private final PurchaseTab purchaseTab;
 
-	private HistoryTab historyTab;
+	private final HistoryTab historyTab;
 
-	private StockTab stockTab;
+	private final StockTab stockTab;
 
-	private ClientTab clientTab;
+	private final ClientTab clientTab;
 
-	private SalesDomainController domainController;
+	private final SalesDomainController domainController;
 
 	/**
 	 * Constructs sales system GUI.

@@ -8,6 +8,7 @@ import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
 import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -39,9 +40,11 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		List<Sale> result = session.createQuery("from Sale").list();
 		log.info(result.size() + " Sales loaded from disk");
 
+		for (Sale sale : result) {
+			sale.setSoldItems(new HashSet<SoldItem>(session.createQuery("from SoldItem where sale_id = " + sale.getId()).list()));
+		}
 		return result;
 	}
-
 
 	@Override
 	@SuppressWarnings("unchecked")

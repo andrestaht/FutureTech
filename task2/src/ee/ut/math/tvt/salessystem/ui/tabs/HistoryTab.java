@@ -23,9 +23,9 @@ import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
  */
 public class HistoryTab {
 
-	private SalesDomainController controller;
+	private final SalesDomainController controller;
 
-	private SalesSystemModel model;
+	private final SalesSystemModel model;
 
 	private PurchaseInfoTableModel historyDetailsTableModel;
 
@@ -59,22 +59,22 @@ public class HistoryTab {
 		ListSelectionModel rowSM = table.getSelectionModel();
 
 		rowSM.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
-
 				// Ignore extra messages.
-				if (e.getValueIsAdjusting()) return;
-
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
 				if (!lsm.isSelectionEmpty()) {
 					int selectedRow = lsm.getMinSelectionIndex();
 					Sale sale = model.getPurchaseHistoryTableModel().getRow(selectedRow);
-
 					historyDetailsTableModel.showSale(sale);
 				}
 			}
 		});
-
 		// Wrap it inside a panel
 		JPanel panel = createWrapperPanel("Sales history");
 		panel.add(scrollPane, getGbConstraints());
